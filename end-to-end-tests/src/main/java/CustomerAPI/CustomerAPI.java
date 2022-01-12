@@ -8,6 +8,10 @@ import javax.ws.rs.client.*;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 
+import DTO.UserDTO;
+
+import java.util.HashMap;
+
 public class CustomerAPI {
     private ArrayList<String> tokens = new ArrayList<>();
     private ArrayList<String> used = new ArrayList<>();
@@ -66,5 +70,15 @@ public class CustomerAPI {
 
     public void setUsed(ArrayList<String> used) {
         this.used = used;
+    }
+    HashMap<String, UserDTO> customerList = new HashMap<>();
+    public String registerCustomer(UserDTO user){
+        String registerID = "din customer mor";
+        customerList.put(registerID, user);
+        return registerID;
+    }
+
+    public HashMap<String, UserDTO> getCustomerList() {
+        return customerList;
     }
 }

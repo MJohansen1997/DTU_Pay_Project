@@ -1,5 +1,6 @@
 package RegisterTest;
 
+import Bank.BankAccountManager;
 import CustomerAPI.CustomerAPI;
 import DTO.UserDTO;
 import MerchantAPI.MerchantAPI;
@@ -9,31 +10,25 @@ import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
-
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
+
 public class RegisterSteps {
-    BankService bank = new BankServiceService().getBankServicePort();
     String bankID;
     String roleID;
     UserDTO userDTO;
-    CustomerAPI cust;
-    MerchantAPI merc;
+    CustomerAPI cust =  new CustomerAPI();
+    MerchantAPI merc = new MerchantAPI();
 
-    @Before
-    public void setupAccount() {
-        ObjectFactory objFac = new ObjectFactory();
-        User user = objFac.createUser();
-
-        user.setCprNumber("12345");
-        user.setFirstName("Merchant");
-        user.setLastName("Testing");
+    @Before("@register")
+    public void setupAccount() throws BankServiceException_Exception {
         try {
-            bankID = bank.createAccountWithBalance(user, BigDecimal.valueOf(1000));
+            bankID = BankAccountManager.createAccount("Merchant", "Testing","1234bonko", new BigDecimal(69));
         } catch (BankServiceException_Exception e) {
-            System.out.println("error setting up");
+            System.out.println("error setting up: " + e.getMessage());
         }
     }
 
@@ -49,13 +44,11 @@ public class RegisterSteps {
 
     @Then("is registering with DTUPay as a customer")
     public void isRegisteredWithDTUPayAsACustomer() {
-        cust = new CustomerAPI();
         roleID = cust.registerCustomer(userDTO);
     }
 
     @Then("is registered with DTUPay as a merchant")
     public void isRegisteredWithDTUPayAsAMerchant() {
-        merc = new MerchantAPI();
         roleID = merc.registerMerchant(userDTO);
     }
 
@@ -70,12 +63,12 @@ public class RegisterSteps {
     }
 
 
-    @After
+    @After("@register")
     public void cleanUp() {
         try {
-            bank.retireAccount(bankID);
+            BankAccountManager.retireAccount(bankID);
         } catch (BankServiceException_Exception e ) {
-            System.out.println("error cleaning up");
+            System.out.println("error cleaning up: " + e.getMessage());
         }
     }
 

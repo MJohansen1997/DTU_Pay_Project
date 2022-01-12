@@ -87,7 +87,7 @@ public class TokenSteps {
         message = mAPI.VerifyToken("a");
     }
 
-    @After
+    @After("@token")
     public void cleanUpAccounts() throws BankServiceException_Exception {
         cAPI.retireAccount();
     }

@@ -1,11 +1,17 @@
 package RegisterTest;
 
+import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 public class RegisterSteps {
+
+    @Before
+    public void setup() {
+    }
+
     @Given("customer has a bank account with a valid account nr {int}")
     public void customerHasABankAccountWithAValidAccountNr(int arg0) {
 

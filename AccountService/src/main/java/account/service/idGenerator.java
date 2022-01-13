@@ -4,11 +4,16 @@ import java.util.UUID;
 
 public class idGenerator {
     public static String generateID(String role) {
+        String id;
         switch (role) {
             case "m":
-                return ("m" + UUID.fromString("merchant").toString());
+                id = UUID.randomUUID().toString();
+                System.out.println(id);
+                return ("m" + id);
             case "c":
-                return ("c" + UUID.fromString("customer").toString());
+                id = UUID.randomUUID().toString();
+                System.out.println(id);
+                return ("c" + id);
             default:
                 return "cant generate id without a role!";
         }

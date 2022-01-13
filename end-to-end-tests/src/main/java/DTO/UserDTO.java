@@ -36,5 +36,11 @@ public class UserDTO {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    
+    public String getBankID() {
+        return bankID;
+    }
+
+    public void setBankID(String bankID) {
+        this.bankID = bankID;
+    }
 }

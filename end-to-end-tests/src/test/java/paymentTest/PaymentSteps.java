@@ -1,11 +1,16 @@
 package paymentTest;
 
+import Bank.BankAccountManager;
 import CustomerAPI.CustomerAPI;
+import DTO.UserDTO;
+import MerchantAPI.MerchantAPI;
 import dtu.ws.fastmoney.*;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.cucumber.java.After;
+import org.junit.Before;
 
 import java.math.BigDecimal;
 
@@ -14,11 +19,18 @@ import static org.junit.Assert.*;
 public class PaymentSteps {
 
     CustomerAPI customerAPI = new CustomerAPI();
+    MerchantAPI merchantAPI = new MerchantAPI();
+    String custBankID, mercBankID;
+    UserDTO cust;
+    UserDTO merc;
+    public BankServiceException_Exception exception = null;
+
 
     @Given("a customer with a bank account with balance {double}")
     public void aCustomerWithABankAccountWithBalance(double balance) {
         try {
-            customerAPI.createAccount("Test", "Testessen", "", new BigDecimal(balance));
+            custBankID = BankAccountManager.createAccount("cust", "Testessen", "515", BigDecimal.valueOf(balance));
+            mercBankID = BankAccountManager.createAccount("merc", "Testessen", "516", BigDecimal.valueOf(balance));
         } catch (BankServiceException_Exception e) {
             e.printStackTrace();
         }
@@ -26,7 +38,8 @@ public class PaymentSteps {
 
     @And("that the customer is registered with DTU Pay")
     public void thatTheCustomerIsRegisteredWithDTUPay() {
-        customerAPI.register();
+        cust = new UserDTO("cust", "Testessen", "515", custBankID);
+        customerAPI.registerCustomer(cust);
     }
 
     @And("the customer has {int} tokens")
@@ -34,53 +47,87 @@ public class PaymentSteps {
         assertEquals(customerAPI.getTokens().size(), tokenAmount);
     }
 
-    @Given("a merchant with a bank account with balance {BigDecimal}")
-    public void aMerchantWithABankAccountWithBalance(BigDecimal balance) {
-        assertEquals(customerAPI.getBalance(), balance);
+    @Given("a merchant with a bank account with balance {double}")
+    public void aMerchantWithABankAccountWithBalance(double balance) throws BankServiceException_Exception {
+        merc = new UserDTO("merc", "Testessen", "516", mercBankID);
+        assertEquals(BankAccountManager.getBalance(merc.getBankID()), balance);
     }
 
     @And("that the merchant is registered with DTU Pay")
     public void thatTheMerchantIsRegisteredWithDTUPay() {
-        customerAPI.register();
+        merchantAPI.registerMerchant(cust);
     }
 
-    @When("the merchant initiates a payment for {BigDecimal} kr by the customer")
-    public void theMerchantInitiatesAPaymentForKrByTheCustomer(BigDecimal amount) {
+    @When("the merchant initiates a payment for {double} kr by the customer")
+    public void theMerchantInitiatesAPaymentForKrByTheCustomer(double amount) {
         try {
-            customerAPI.transferMoney();
+            BankAccountManager.transferMoney(custBankID, mercBankID, new BigDecimal(amount), "Test transfer");
             assertTrue(true);
         } catch (BankServiceException_Exception e) {
-            //This will make it fail if any exception is catched
-            assertTrue(false);
+            exception = e;
+            fail();
         }
     }
 
     @Then("the payment is {string}")
-    public void thePaymentIsSuccessful() {
-        //successful
+    public void thePaymentIsSuccessful(String status) {
+        assertEquals(exception, null);
+        assertTrue("successful".equalsIgnoreCase(status));
     }
 
     @And("the balance of the customer at the bank is {double} kr")
-    public void theBalanceOfTheCustomerAtTheBankIsKr(double balance) {
+    public void theBalanceOfTheCustomerAtTheBankIsKr(double balance) throws BankServiceException_Exception {
+        BigDecimal accountBalance = customerAPI.getAccount(custBankID).getBalance();
+        assertEquals(balance, accountBalance);
     }
 
     @And("the balance of the merchant at the bank is {double} kr")
-    public void theBalanceOfTheMerchantAtTheBankIsKr(double balance) {
+    public void theBalanceOfTheMerchantAtTheBankIsKr(double balance) throws BankServiceException_Exception {
+        BigDecimal accountBalance = customerAPI.getAccount(mercBankID).getBalance();
+        assertEquals(balance, accountBalance);
     }
 
     @Given("a customer with the ID {string}")
     public void aCustomerWithTheID(String customerID) {
+        try {
+            custBankID = BankAccountManager.createAccount("cust", "Testessen", "515", BigDecimal.valueOf(0));
+            assertTrue(customerID.equalsIgnoreCase(custBankID));
+        } catch (BankServiceException_Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @And("a merchant with the ID {string}")
     public void aMerchantWithTheID(String merchantID) {
+        try {
+            mercBankID = BankAccountManager.createAccount("cust", "Testessen", "515", BigDecimal.valueOf(0));
+            assertTrue(merchantID.equalsIgnoreCase(mercBankID));
+        } catch (BankServiceException_Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    @Given("the merchant select the customer ID, which is {string}")
-    public void theMerchantSelectTheCustomerIDWhichIs(String customerID) {
+    @Given("the merchant types a {string} customerID")
+    public void theMerchantTypesACustomerID(String customerID) {
+        //assertEquals(custBankID,customerID);
+        Exception exception = null;
+        try {
+            BankAccountManager.transferMoney(customerID, mercBankID, new BigDecimal(1), "");
+        } catch (BankServiceException_Exception e) {
+            exception = e;
+        }
+        assertTrue(exception == null);
     }
 
-    @Then("the payment is {string}")
-    public void thePaymentIsDenied(String status) {
+    @After("@payment")
+    public void cleanup() {
+        try {
+            BankAccountManager.retireAccount(custBankID);
+            BankAccountManager.retireAccount(mercBankID);
+            custBankID = null;
+            mercBankID = null;
+        } catch (BankServiceException_Exception e) {
+            System.out.println("error cleaning up: " + e.getMessage());
+        }
     }
 }

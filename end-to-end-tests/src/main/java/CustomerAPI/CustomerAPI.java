@@ -17,11 +17,9 @@ public class CustomerAPI {
     private ArrayList<String> used = new ArrayList<>();
     HashMap<String, UserDTO> customerList = new HashMap<>();
     Client client = ClientBuilder.newClient();
+    String bankID;
+    String DTUPayID;
 
-    String bankID, DTUPayID, cID, mID, description;
-    BigDecimal balance, amount;
-
-    ObjectFactory objectFactory = new ObjectFactory();
     BankService bank = new BankServiceService().getBankServicePort();
 
     public String requestTokens(){
@@ -59,9 +57,6 @@ public class CustomerAPI {
         bank.retireAccount(bankID);
     }
 
-    public void transferMoney() throws BankServiceException_Exception {
-        bank.transferMoneyFromTo(this.cID,this.mID,this.amount,this.description);
-    }
 
     public ArrayList<String> getTokens() {
         return tokens;
@@ -79,25 +74,30 @@ public class CustomerAPI {
         this.used = used;
     }
 
-    public String getBankID() {
-        return bankID;
+    public String registerCustomer(UserDTO user) {
+        WebTarget target = client.target("http://localhost:8080/payment");
+        String result;
+        try {
+            result = target.request(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.TEXT_PLAIN_TYPE)
+                    .get(new GenericType<>() {});
+
+            String registerID = result;
+            customerList.put(result, user);
+            return registerID;
+        }catch (Exception exception) {
+            return "wrong input";
+        }
+//        /* If non valid bank account id throw exception */
+//        if(user.getBankID().equals("0") || user.getFirstName().isEmpty()) {
+//            return "404";
+//        }
+
+
     }
 
-    public void setBankID(String bankID) {
-        this.bankID = bankID;
-    }
-
-    public BigDecimal getBalance() {
-        return balance;
-    }
-
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
-    }
-    public String registerCustomer(UserDTO user){
-        String registerID = "din customer mor";
-        customerList.put(registerID, user);
-        return registerID;
+    public Account getAccount(String accountID) throws BankServiceException_Exception {
+        return bank.getAccount(accountID);
     }
 
     public HashMap<String, UserDTO> getCustomerList() {

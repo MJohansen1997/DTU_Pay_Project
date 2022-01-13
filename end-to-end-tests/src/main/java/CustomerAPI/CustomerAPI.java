@@ -1,6 +1,5 @@
 package CustomerAPI;
 
-import CustomExceptions.CustomRegistrationException;
 import dtu.ws.fastmoney.*;
 
 import java.math.BigDecimal;
@@ -56,6 +55,10 @@ public class CustomerAPI {
 
     public void retireAccount() throws BankServiceException_Exception {
         bank.retireAccount(bankID);
+    }
+
+    public void transferMoney() throws BankServiceException_Exception {
+        bank.transferMoneyFromTo(this.cID,this.mID,this.amount,this.description);
     }
 
     public ArrayList<String> getTokens() {

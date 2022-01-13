@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="end-to-end-tests" />
+        <module name="ReportService" />
         <module name="DTUFacade" />
         <module name="messaging-utilities" />
         <module name="AccountService" />
@@ -16,7 +17,6 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="Broker" target="11" />
-      <module name="TokenService (1)" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

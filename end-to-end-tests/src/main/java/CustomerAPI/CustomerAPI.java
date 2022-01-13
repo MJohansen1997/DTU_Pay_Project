@@ -96,6 +96,10 @@ public class CustomerAPI {
 
     }
 
+    public Account getAccount(String accountID) throws BankServiceException_Exception {
+        return bank.getAccount(accountID);
+    }
+
     public HashMap<String, UserDTO> getCustomerList() {
         return customerList;
     }

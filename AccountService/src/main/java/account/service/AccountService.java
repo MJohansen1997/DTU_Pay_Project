@@ -19,28 +19,40 @@ public class AccountService {
         queue = q;
         queue.addHandler("MerchantRegister", this::merchantRegister);
         queue.addHandler("CustomerRegister", this::customerRegister);
-        queue.addHandler("MerchantList", this::customerRegister);
-        queue.addHandler("CustomerList", this::customerRegister);
-
+        queue.addHandler("GetMerchantList", this::getMerchantList);
+        queue.addHandler("GetCustomerList", this::getCustomerList);
+        queue.addHandler("GetSpecificMerchant", this::customerRegister);
+        queue.addHandler("GetSpecificCustomer", this::customerRegister);
     }
 
     public void merchantRegister(Event event) {
         Account acc = event.getArgument(0,Account.class);
         String id = idGenerator.generateID("m");
         merchantList.put(id, acc);
-        Event mercReg = new Event("MerchantRegisteredSuccessfully", new Object[] {id});
-        queue.publish(mercReg);
+        Event tempEvent = new Event("MerchantRegisteredSuccessfully", new Object[] {id});
+        queue.publish(tempEvent);
     }
     public void customerRegister(Event event) {
         Account acc = event.getArgument(0,Account.class);
         String id = idGenerator.generateID("c");
         customerList.put(id, acc);
+        Event tempEvent = new Event("CustomerRegisteredSuccessfully", new Object[] {id});
+        queue.publish(tempEvent);
     }
 
-    public void getCustomerList() {
+    public void getCustomerList(Event event) {
+        Event custListEvent = new Event("ReturningCustomerList", new Object[] {customerList.values()});
+        queue.publish(custListEvent);
+    }
+    public void getMerchantList(Event event) {
+        Event mercListEvent = new Event("ReturningMerchantList", new Object[] {merchantList});
+        queue.publish(mercListEvent);
+    }
+
+    public void getSpecificCustomer(Event event) {
 
     }
-    public void getMerchantList() {
+    public void getSpecificMerchant(Event event) {
 
     }
 }

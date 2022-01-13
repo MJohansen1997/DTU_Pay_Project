@@ -17,9 +17,11 @@ public class CustomerAPI {
     private ArrayList<String> used = new ArrayList<>();
     HashMap<String, UserDTO> customerList = new HashMap<>();
     Client client = ClientBuilder.newClient();
-    String bankID;
-    String DTUPayID;
 
+    String bankID, DTUPayID, cID, mID, description;
+    BigDecimal balance, amount;
+
+    ObjectFactory objectFactory = new ObjectFactory();
     BankService bank = new BankServiceService().getBankServicePort();
 
     public String requestTokens(){
@@ -45,7 +47,7 @@ public class CustomerAPI {
         bankID = bank.createAccountWithBalance(user,balance);
     }
 
-    public void Register(){
+    public void register(){
         WebTarget target = client.target("http://localhost:8080/account");
 //        String result = target.request(MediaType.APPLICATION_JSON)
 //                .accept(MediaType.TEXT_PLAIN_TYPE)
@@ -55,6 +57,10 @@ public class CustomerAPI {
 
     public void retireAccount() throws BankServiceException_Exception {
         bank.retireAccount(bankID);
+    }
+
+    public void transferMoney() throws BankServiceException_Exception {
+        bank.transferMoneyFromTo(this.cID,this.mID,this.amount,this.description);
     }
 
     public ArrayList<String> getTokens() {
@@ -71,6 +77,22 @@ public class CustomerAPI {
 
     public void setUsed(ArrayList<String> used) {
         this.used = used;
+    }
+
+    public String getBankID() {
+        return bankID;
+    }
+
+    public void setBankID(String bankID) {
+        this.bankID = bankID;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
     public String registerCustomer(UserDTO user){
         String registerID = "din customer mor";

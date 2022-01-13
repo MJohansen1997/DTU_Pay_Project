@@ -26,7 +26,7 @@ public class TokenSteps {
 
     @Given("that the customer is registered with DTU pay")
     public void that_the_customer_is_registered_with_dtu_pay() {
-        cAPI.Register();
+        cAPI.register();
     }
     @Given("the customer has {int} token left")
     public void the_customer_has_token_left(Integer int1) {
@@ -59,7 +59,7 @@ public class TokenSteps {
 
     @And("that the customer is registered with DTU Pay")
     public void thatTheCustomerIsRegisteredWithDTUPay() {
-        cAPI.Register();
+        cAPI.register();
     }
 
     @And("the customer has at least {int} unused token")

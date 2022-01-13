@@ -15,6 +15,7 @@
         <module>TokenService</module>
         <module>DTUFacade</module>
         <module>messaging-utilities-3.2</module>
+        <module>ReportService</module>
     </modules>
 
     <properties>

@@ -7,9 +7,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="end-to-end-tests" />
-        <module name="AccountService" />
+        <module name="ReportService" />
         <module name="DTUFacade" />
         <module name="messaging-utilities" />
+        <module name="AccountService" />
         <module name="PaymentService" />
         <module name="TokenService" />
       </profile>

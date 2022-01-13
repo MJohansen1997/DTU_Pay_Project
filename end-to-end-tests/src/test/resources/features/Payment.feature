@@ -1,4 +1,5 @@
 Feature: Payment
+  @payment
   Scenario: Successful Payment
     Given a customer with a bank account with balance 1000.00
     And that the customer is registered with DTU Pay
@@ -10,6 +11,7 @@ Feature: Payment
     And the balance of the customer at the bank is 900.00 kr
     And the balance of the merchant at the bank is 2100.00 kr
 
+  @payment
   Scenario: Fail Payment due to wrong ID
     Given a customer with the ID "c123"
     And the customer has 3 tokens
@@ -21,6 +23,7 @@ Feature: Payment
     And the balance of the customer at the bank is 1000.00 kr
     And the balance of the merchant at the bank is 2000.00 kr
 
+  @payment
   Scenario: Fail Payment due to not enough tokens
     Given a customer with the ID "c123"
     And the customer has 0 tokens

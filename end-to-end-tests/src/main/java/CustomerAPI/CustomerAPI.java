@@ -45,7 +45,7 @@ public class CustomerAPI {
         bankID = bank.createAccountWithBalance(user,balance);
     }
 
-    public void Register(){
+    public void register(){
         WebTarget target = client.target("http://localhost:8080/account");
 //        String result = target.request(MediaType.APPLICATION_JSON)
 //                .accept(MediaType.TEXT_PLAIN_TYPE)
@@ -57,9 +57,6 @@ public class CustomerAPI {
         bank.retireAccount(bankID);
     }
 
-    public void transferMoney() throws BankServiceException_Exception {
-        bank.transferMoneyFromTo(this.cID,this.mID,this.amount,this.description);
-    }
 
     public ArrayList<String> getTokens() {
         return tokens;
@@ -76,7 +73,6 @@ public class CustomerAPI {
     public void setUsed(ArrayList<String> used) {
         this.used = used;
     }
-
 
     public String registerCustomer(UserDTO user) {
         /* If non valid bank account id throw exception */

@@ -4,9 +4,6 @@ public class UserDTO {
     String firstName;
     String lastName;
     String cpr;
-
-
-
     String bankID;
 
     public UserDTO(String firstName, String lastName, String cpr, String bankID) {

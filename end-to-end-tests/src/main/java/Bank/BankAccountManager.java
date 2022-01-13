@@ -17,4 +17,12 @@ public class BankAccountManager {
     public static void retireAccount(String bankID) throws BankServiceException_Exception {
         bank.retireAccount(bankID);
     }
+
+    public static BigDecimal getBalance(String bankID) throws BankServiceException_Exception {
+        return bank.getAccount(bankID).getBalance();
+    }
+
+    public static void transferMoney(String cID, String mID, BigDecimal amount, String description) throws BankServiceException_Exception {
+        bank.transferMoneyFromTo(cID, mID, amount, description);
+    }
 }

@@ -2,19 +2,33 @@ package MerchantAPI;
 
 import DTO.UserDTO;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
 import java.util.HashMap;
 
 public class MerchantAPI {
-
+    Client client = ClientBuilder.newClient();
     public String VerifyToken(String token) {
         return "";
     }
 
     HashMap<String, UserDTO> merchantList = new HashMap<>();
     public String registerMerchant(UserDTO user){
-        String registerID = "din merchant mor";
-        merchantList.put(registerID, user);
-        return registerID;
+        WebTarget target = client.target("http://localhost:8080/payment");
+        String result;
+        try {
+            result = target.request(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.TEXT_PLAIN_TYPE)
+                    .get(new GenericType<>() {});
+
+            merchantList.put(result, user);
+            return result;
+        }catch (Exception exception) {
+            return "wrong input";
+        }
     }
 
     public HashMap<String, UserDTO> getMerchantList() {

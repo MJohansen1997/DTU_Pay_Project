@@ -75,14 +75,25 @@ public class CustomerAPI {
     }
 
     public String registerCustomer(UserDTO user) {
-        /* If non valid bank account id throw exception */
-        if(user.getBankID().equals("0") || user.getFirstName().isEmpty()) {
-            return "404";
-        }
+        WebTarget target = client.target("http://localhost:8080/payment");
+        String result;
+        try {
+            result = target.request(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.TEXT_PLAIN_TYPE)
+                    .get(new GenericType<>() {});
 
-        String registerID = "din customer mor";
-        customerList.put(registerID, user);
-        return registerID;
+            String registerID = result;
+            customerList.put(result, user);
+            return registerID;
+        }catch (Exception exception) {
+            return "wrong input";
+        }
+//        /* If non valid bank account id throw exception */
+//        if(user.getBankID().equals("0") || user.getFirstName().isEmpty()) {
+//            return "404";
+//        }
+
+
     }
 
     public HashMap<String, UserDTO> getCustomerList() {

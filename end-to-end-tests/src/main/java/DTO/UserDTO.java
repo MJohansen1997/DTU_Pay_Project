@@ -4,6 +4,9 @@ public class UserDTO {
     String firstName;
     String lastName;
     String cpr;
+
+
+
     String bankID;
 
     public UserDTO(String firstName, String lastName, String cpr, String bankID) {
@@ -36,5 +39,11 @@ public class UserDTO {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    
+    public String getBankID() {
+        return bankID;
+    }
+
+    public void setBankID(String bankID) {
+        this.bankID = bankID;
+    }
 }

@@ -1,6 +1,7 @@
 package RegisterTest;
 
 import Bank.BankAccountManager;
+import CustomExceptions.CustomRegistrationException;
 import CustomerAPI.CustomerAPI;
 import DTO.UserDTO;
 import MerchantAPI.MerchantAPI;
@@ -22,6 +23,7 @@ public class RegisterSteps {
     UserDTO userDTO;
     CustomerAPI cust =  new CustomerAPI();
     MerchantAPI merc = new MerchantAPI();
+    String registerID;
 
     @Before("@register")
     public void setupAccount() throws BankServiceException_Exception {
@@ -43,7 +45,7 @@ public class RegisterSteps {
     }
 
     @Then("is registering with DTUPay as a customer")
-    public void isRegisteredWithDTUPayAsACustomer() {
+    public void isRegisteredWithDTUPayAsACustomer() throws CustomRegistrationException {
         roleID = cust.registerCustomer(userDTO);
     }
 
@@ -62,6 +64,22 @@ public class RegisterSteps {
         assertTrue(merc.getMerchantList().containsKey(roleID));
     }
 
+
+    @Given("user gives non existing bank account id")
+    public void userGivesNonExistingBankAccountId() {
+        registerID = cust.registerCustomer(new UserDTO("cust", "testing no valid bank account","2234","0"));
+    }
+
+    @Given("user gives empty input")
+    public void userGivesEmptyInput() {
+        registerID = cust.registerCustomer(new UserDTO("", "no first name","2234","1"));
+
+    }
+
+    @Then("is given an error message")
+    public void isGivenAnErrorMessage() {
+        assertEquals("404", registerID);
+    }
 
     @After("@register")
     public void cleanUp() {

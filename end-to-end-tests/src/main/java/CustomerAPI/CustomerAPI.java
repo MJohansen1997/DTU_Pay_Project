@@ -1,5 +1,6 @@
 package CustomerAPI;
 
+import CustomExceptions.CustomRegistrationException;
 import dtu.ws.fastmoney.*;
 
 import java.math.BigDecimal;
@@ -72,7 +73,14 @@ public class CustomerAPI {
     public void setUsed(ArrayList<String> used) {
         this.used = used;
     }
-    public String registerCustomer(UserDTO user){
+
+
+    public String registerCustomer(UserDTO user) {
+        /* If non valid bank account id throw exception */
+        if(user.getBankID().equals("0") || user.getFirstName().isEmpty()) {
+            return "404";
+        }
+
         String registerID = "din customer mor";
         customerList.put(registerID, user);
         return registerID;

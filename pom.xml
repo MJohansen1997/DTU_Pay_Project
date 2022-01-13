@@ -14,7 +14,7 @@
         <module>PaymentService</module>
         <module>TokenService</module>
         <module>DTUFacade</module>
-        <module>Broker</module>
+        <module>messaging-utilities-3.2</module>
     </modules>
 
     <properties>

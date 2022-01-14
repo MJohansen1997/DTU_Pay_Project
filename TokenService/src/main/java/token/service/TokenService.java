@@ -18,10 +18,10 @@ public class TokenService {
 
     public void handleTokensRequested(Event event) {
         System.out.println("Message received");
-        var s = event.getArgument(0, String.class);
+        var userID = event.getArgument(0, String.class);
         Event returnEvent;
         try {
-            returnEvent = new Event("TokensRequestedSucceeded", new Object[] {register.requestNewSet(s)});
+            returnEvent = new Event("TokensRequestedSucceeded", new Object[] {register.requestNewSet(userID)});
             queue.publish(returnEvent);
         } catch (ToManyTokensLeftException e) {
             returnEvent = new Event("TokensRequestedFailed", new Object[] {e.getMessage()});

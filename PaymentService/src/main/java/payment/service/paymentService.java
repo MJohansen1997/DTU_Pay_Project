@@ -6,7 +6,7 @@ import payment.service.DTO.Payment;
 
 public class paymentService {
     MessageQueue queue;
-    //Facade facade = new Facade();
+
     public paymentService(MessageQueue q) {
         this.queue = q;
         this.queue.addHandler("PaymentRequested", this::handlePaymentRequested);

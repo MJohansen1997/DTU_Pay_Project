@@ -1,7 +1,6 @@
 package facades.customerFacade;
 
 import messaging.implementations.RabbitMqQueue;
-import studentregistration.service.StudentRegistrationService;
 
 public class CustomerFacadeFactory {
     static CustomerFacade facade = null;

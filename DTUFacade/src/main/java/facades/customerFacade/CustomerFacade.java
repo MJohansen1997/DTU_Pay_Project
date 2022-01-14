@@ -17,10 +17,10 @@ public class CustomerFacade {
     public String registerCustomer(RegistrationDTO regInfo) {
         future = new CompletableFuture<>();
         Event tempE = new Event("CustomerRegister",  new Object[] { regInfo });
-        queue.publish(tempE);
+            queue.publish(tempE);
         return future.join();
     }
-    public void successfulCustomerRegistration(Event e) {
+    private void successfulCustomerRegistration(Event e) {
         var id = e.getArgument(0, String.class);
         future.complete(id);
     }

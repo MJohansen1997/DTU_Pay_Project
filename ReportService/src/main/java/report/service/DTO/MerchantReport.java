@@ -6,8 +6,8 @@ import java.math.BigDecimal;
 public class MerchantReport extends Report implements Serializable {
     private static final long serialVersionUID = 9023222981284806610L;
 
-    public MerchantReport(String merchantID, String tokenID, String bankID, BigDecimal amount) {
-        super(merchantID, tokenID, bankID, amount);
+    public MerchantReport(String paymentID, String merchantID, String tokenID, String bankID, BigDecimal amount) {
+        super(paymentID, merchantID, tokenID, bankID, amount);
     }
     public MerchantReport(){super();}
 }

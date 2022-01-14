@@ -32,8 +32,11 @@ public class MerchantResource {
     @Consumes("application/json")
     @Produces("application/json")
     public Payment payment(Payment payment) {
+        String tokenID = payment.getToken();
         MerchantFacade CF = new MerchantFacadeFactory().getFacade();
-
+        //maybe do some checks here :-)
+        String userID = CF.consumeToken(tokenID);
+        payment.setDebitor(userID);
         return CF.paymentMerchant(payment);
     }
 }

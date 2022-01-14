@@ -11,11 +11,13 @@ public class MerchantFacade {
     private MessageQueue queue;
     private CompletableFuture<String> future;
     private CompletableFuture<Payment> paymentFuture;
+    private CompletableFuture<String> tokeConsumerFuture;
     
     public MerchantFacade(MessageQueue q) {
         queue = q;
         queue.addHandler("MerchantRegisteredSuccessfully", this::successfulMerchantRegistration);
         queue.addHandler("MerchantPaymentSuccessfully", this::successfulMerchantPayment);
+        queue.addHandler("UserID fecthed", this::handleUserIdFetched);
     }
 
     public String registerMerchant(RegistrationDTO regInfo) {
@@ -39,5 +41,17 @@ public class MerchantFacade {
     public void successfulMerchantPayment(Event e) {
         var id = e.getArgument(0, String.class);
         future.complete(id);
+    }
+
+    public String consumeToken(String tokenID){
+        tokeConsumerFuture = new CompletableFuture<>();
+        Event tempE = new Event("ConsumeTokenRequested",  new Object[] { tokenID });
+        queue.publish(tempE);
+        return tokeConsumerFuture.join();
+    }
+
+    private void handleUserIdFetched(Event event) {
+        var id = event.getArgument(0,String.class);
+        tokeConsumerFuture.complete(id);
     }
 }

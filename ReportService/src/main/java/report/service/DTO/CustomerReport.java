@@ -8,8 +8,8 @@ public class CustomerReport extends Report implements Serializable {
 
     String customerID;
 
-    public CustomerReport(String customerID, String merchantID, String tokenID, String bankID, BigDecimal amount) {
-        super(merchantID, tokenID, bankID, amount);
+    public CustomerReport(String paymentID, String customerID, String merchantID, String tokenID, String bankID, BigDecimal amount) {
+        super(paymentID, merchantID, tokenID, bankID, amount);
         this.customerID = customerID;
     }
     public CustomerReport(){super();}

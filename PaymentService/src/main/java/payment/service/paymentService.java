@@ -11,7 +11,7 @@ public class paymentService {
     BankService bankService = new BankServiceService().getBankServicePort();
     public paymentService(MessageQueue q) {
         this.queue = q;
-        this.queue.addHandler("PaymentRequested", this::handlePaymentRequested);
+        this.queue.addHandler("MerchantPaymentRequested", this::handlePaymentRequested);
     }
 
     public void handlePaymentRequested(Event ev) {
@@ -20,9 +20,9 @@ public class paymentService {
         //Do BusinessLogic
         try {
             bankService.transferMoneyFromTo(p.getDebitor(),p.getCreditor(),p.getAmount(),p.getDescription());
-            event = new Event("PaymentCompleted", new Object[] { p });
+            event = new Event("MerchantPaymentSuccessfully", new Object[] { p });
         } catch (/*BankServiceException_Exception*/Exception e) {
-            event = new Event("PaymentCompleted", new Object[] { p });
+            event = new Event("MerchantPaymentSuccessfully", new Object[] { p });
         }
         queue.publish(event);
     }

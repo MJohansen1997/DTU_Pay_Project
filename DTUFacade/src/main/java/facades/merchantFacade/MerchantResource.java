@@ -1,5 +1,6 @@
 package facades.merchantFacade;
 
+import facades.DTO.Payment;
 import facades.DTO.RegistrationDTO;
 import facades.customerFacade.CustomerFacade;
 import facades.customerFacade.CustomerFacadeFactory;
@@ -24,5 +25,15 @@ public class MerchantResource {
             return Response.status(404).entity(e.getMessage()).build();
         }
         return Response.status(200).entity("User registered with id: " + id).build();
+    }
+
+    @Path("/payment")
+    @POST
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Payment payment(Payment payment) {
+        MerchantFacade CF = new MerchantFacadeFactory().getFacade();
+
+        return CF.paymentMerchant(payment);
     }
 }

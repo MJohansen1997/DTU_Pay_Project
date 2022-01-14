@@ -1,12 +1,14 @@
 package payment.service;
 
+import dtu.ws.fastmoney.BankService;
+import dtu.ws.fastmoney.BankServiceService;
 import messaging.Event;
 import messaging.MessageQueue;
 import payment.service.DTO.Payment;
 
 public class paymentService {
     MessageQueue queue;
-
+    BankService bankService = new BankServiceService().getBankServicePort();
     public paymentService(MessageQueue q) {
         this.queue = q;
         this.queue.addHandler("PaymentRequested", this::handlePaymentRequested);
@@ -17,7 +19,7 @@ public class paymentService {
         Event event;
         //Do BusinessLogic
         try {
-            //facade.transferMoneyFromTo(p.getDebitor(),p.getCreditor(),p.getAmount(),p.getDescription());
+            bankService.transferMoneyFromTo(p.getDebitor(),p.getCreditor(),p.getAmount(),p.getDescription());
             event = new Event("PaymentCompleted", new Object[] { p });
         } catch (/*BankServiceException_Exception*/Exception e) {
             event = new Event("PaymentCompleted", new Object[] { p });

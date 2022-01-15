@@ -26,7 +26,7 @@ public class TokenSteps {
     String message;
 
 
-    @Given("that the customer is registered with DTU pay")
+    @Given("the customer is registered with DTU pay")
     public void that_the_customer_is_registered_with_dtu_pay() {
         cAPI.setDTUPayID(cAPI.registerCustomer(new UserDTO("Token", "Tokenson", "123499-1234", cAPI.getBankID())));
     }
@@ -61,35 +61,6 @@ public class TokenSteps {
         }
     }
 
-    @And("that the customer is registered with DTU Pay")
-    public void thatTheCustomerIsRegisteredWithDTUPay() {
-        cAPI.registerCustomer(new UserDTO("Token", "Tokenson", "123499-1234", cAPI.getBankID()));
-    }
-
-    @And("the customer has at least {int} unused token")
-    public void theCustomerHasAtLeastUnusedToken(int arg0) {
-        assertTrue(cAPI.getTokens().size() >= 1);
-    }
-
-    @When("the merchant verifies the token")
-    public void theMerchantVerifiesTheToken() {
-       message = mAPI.VerifyToken(token);
-    }
-
-    @Then("then he receives the message {string}")
-    public void thenHeReceivesTheMessage(String arg0) {
-        assertEquals(message, arg0);
-    }
-
-    @And("the customer has at least {int} used token")
-    public void theCustomerHasAtLeastUsedToken(int arg0) {
-        assertTrue(cAPI.getUsed().size() >= 1);
-    }
-
-    @Given("the merchant receives an invalid token")
-    public void theMerchantReceivesAnInvalidToken() {
-        message = mAPI.VerifyToken("a");
-    }
 
     @After("@token")
     public void cleanUpAccounts() throws BankServiceException_Exception {

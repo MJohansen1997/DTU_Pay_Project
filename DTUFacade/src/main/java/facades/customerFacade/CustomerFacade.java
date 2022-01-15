@@ -12,6 +12,7 @@ public class CustomerFacade {
     private MessageQueue queue;
     private CompletableFuture<String> future;
     private CompletableFuture<TokenList> tokensRequested;
+
     public CustomerFacade(MessageQueue q) {
         queue = q;
         queue.addHandler("CustomerRegisteredSuccessfully", this::successfulCustomerRegistration);
@@ -21,14 +22,14 @@ public class CustomerFacade {
 
     public String registerCustomer(RegistrationDTO regInfo) {
         future = new CompletableFuture<>();
-        Event tempE = new Event("CustomerRegister",  new Object[] { regInfo });
-            queue.publish(tempE);
+        Event tempE = new Event("CustomerRegister", new Object[]{regInfo});
+        queue.publish(tempE);
         return future.join();
     }
 
     public TokenList requestTokens(String userID) {
         tokensRequested = new CompletableFuture<>();
-        Event event = new Event("TokensRequested", new Object[] { userID });
+        Event event = new Event("TokensRequested", new Object[]{userID});
         queue.publish(event);
         return tokensRequested.join();
     }
@@ -43,7 +44,6 @@ public class CustomerFacade {
         tokensRequested.complete(null);
     }
 
-    public void successfulCustomerRegistration(Event e) {
     private void successfulCustomerRegistration(Event e) {
         var id = e.getArgument(0, String.class);
         future.complete(id);

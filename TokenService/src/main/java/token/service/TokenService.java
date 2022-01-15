@@ -28,6 +28,8 @@ public class TokenService implements ITokenService {
         TokenList temp = repository.getTokensByUser(userID);
         if (temp == null)
             throw new UserNotFoundException("Invalid User");
+        if (temp.getTokens().size() > 1)
+            throw new ToManyTokensLeftException("To many tokens left");
         //This method is used to make sure the user doesn't have more than the 1 allowed token left before requesting a new one
         //here we return a new list of Tokens
         return repository.updateTokenList(userID, generateNewSet(temp.getTokens().size()));

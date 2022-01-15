@@ -1,6 +1,8 @@
 package TokenTests;
 
 import CustomerAPI.CustomerAPI;
+import DTO.RegistrationDTO;
+import DTO.UserDTO;
 import MerchantAPI.MerchantAPI;
 import dtu.ws.fastmoney.BankServiceException_Exception;
 import io.cucumber.java.After;
@@ -26,7 +28,7 @@ public class TokenSteps {
 
     @Given("that the customer is registered with DTU pay")
     public void that_the_customer_is_registered_with_dtu_pay() {
-        cAPI.register();
+        cAPI.setDTUPayID(cAPI.registerCustomer(new UserDTO("Token", "Tokenson", "123499-1234", cAPI.getBankID())));
     }
 
     @Given("the customer has {int} token left")
@@ -61,7 +63,7 @@ public class TokenSteps {
 
     @And("that the customer is registered with DTU Pay")
     public void thatTheCustomerIsRegisteredWithDTUPay() {
-        cAPI.register();
+        cAPI.registerCustomer(new UserDTO("Token", "Tokenson", "123499-1234", cAPI.getBankID()));
     }
 
     @And("the customer has at least {int} unused token")

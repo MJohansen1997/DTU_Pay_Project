@@ -1,5 +1,6 @@
 package CustomerAPI;
 
+import DTO.RegistrationDTO;
 import DTO.TokenList;
 import dtu.ws.fastmoney.*;
 
@@ -51,14 +52,6 @@ public class CustomerAPI {
         bankID = bank.createAccountWithBalance(user,balance);
     }
 
-    public void register(){
-        WebTarget target = client.target("http://localhost:8080/account");
-//        String result = target.request(MediaType.APPLICATION_JSON)
-//                .accept(MediaType.TEXT_PLAIN_TYPE)
-//                .post(Entity.json(), String.class);
-        DTUPayID = "hej";
-    }
-
     public void retireAccount() throws BankServiceException_Exception {
         bank.retireAccount(bankID);
     }
@@ -81,15 +74,16 @@ public class CustomerAPI {
     }
 
     public String registerCustomer(UserDTO user) {
-        WebTarget target = client.target("http://localhost:8080/payment");
+        WebTarget target = client.target("http://localhost:8080/customer/account");
         String result;
         try {
             result = target.request(MediaType.APPLICATION_JSON)
                     .accept(MediaType.TEXT_PLAIN_TYPE)
-                    .get(new GenericType<>() {});
+                    .post(Entity.json(user), String.class);
 
             String registerID = result;
             customerList.put(result, user);
+            setDTUPayID(registerID);
             return registerID;
         }catch (Exception exception) {
             return "wrong input";
@@ -100,6 +94,14 @@ public class CustomerAPI {
 //        }
 
 
+    }
+
+    public String getBankID() {
+        return bankID;
+    }
+
+    public void setBankID(String bankID) {
+        this.bankID = bankID;
     }
 
     public Account getAccount(String accountID) throws BankServiceException_Exception {

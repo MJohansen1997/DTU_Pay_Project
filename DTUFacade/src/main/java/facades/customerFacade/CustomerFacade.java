@@ -4,6 +4,7 @@ import facades.DTO.RegistrationDTO;
 import facades.DTO.TokenList;
 import facades.exceptions.InvalidRegistrationInputException;
 import facades.exceptions.ToManyTokensLeftException;
+import facades.exceptions.InvalidRegistrationInputException;
 import messaging.Event;
 import messaging.MessageQueue;
 
@@ -21,6 +22,8 @@ public class CustomerFacade {
         queue.addHandler("TokensRequestedSucceeded", this::successfulTokensRequest);
         queue.addHandler("ToManyTokensLeft", this::failedTokensRequest);
         queue.addHandler("TokenUserNotFound", this::failedTokensRequest);
+        queue.addHandler("CustomerBankIdNotFound", this::unsuccessfulCustomerRegistration);
+        queue.addHandler("CustomerInvalidInput", this::unsuccessfulCustomerRegistration);
     }
 
     public String registerCustomer(RegistrationDTO regInfo) {
@@ -49,8 +52,12 @@ public class CustomerFacade {
         tokensRequested.completeExceptionally(new ToManyTokensLeftException(e.getType()));
     }
 
+
     private void successfulCustomerRegistration(Event e) {
         var id = e.getArgument(0, String.class);
         future.complete(id);
+    }
+    private void unsuccessfulCustomerRegistration(Event e) {
+        future.completeExceptionally(new InvalidRegistrationInputException(e.getType()));
     }
 }

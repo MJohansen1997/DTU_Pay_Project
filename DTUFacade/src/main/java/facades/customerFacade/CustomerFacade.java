@@ -20,6 +20,7 @@ public class CustomerFacade {
         queue.addHandler("CustomerRegisteredSuccessfully", this::successfulCustomerRegistration);
         queue.addHandler("TokensRequestedSucceeded", this::successfulTokensRequest);
         queue.addHandler("ToManyTokensLeft", this::failedTokensRequest);
+        queue.addHandler("TokenUserNotFound", this::failedTokensRequest);
     }
 
     public String registerCustomer(RegistrationDTO regInfo) {

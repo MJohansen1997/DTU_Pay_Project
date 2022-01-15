@@ -12,13 +12,19 @@ public class TokenList implements Serializable {
         tokens = new ArrayList<>();
     }
 
-
-
     public ArrayList<String> getTokens() {
         return tokens;
     }
 
     public void setTokens(ArrayList<String> tokens) {
         this.tokens = tokens;
+    }
+
+    public boolean contains(String compare) {
+        for ( String token : tokens ) {
+            if (token.equals(compare))
+                return true;
+        }
+        return false;
     }
 }

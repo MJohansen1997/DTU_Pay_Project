@@ -9,6 +9,7 @@ import javax.ws.rs.NotFoundException;
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import DTO.UserDTO;
 
@@ -25,20 +26,20 @@ public class CustomerAPI {
     BankService bank = new BankServiceService().getBankServicePort();
 
     public String requestTokens(String userID){
-        WebTarget target = client.target("http://localhost:8080/customer/token");
+        WebTarget target = client.target("http://localhost:8080/customer/tokens");
         try {
             tokens = target.request(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .post(Entity.json(userID), TokenList.class).getTokens();
-            return "tokens received";
+            return "Tokens received";
         }catch (NotFoundException exception) {
             //How does we handle exceptions here? HTTP or Custom exceptions?
-            return "tokens not received";
+            return "Tokens not received";
         }
     }
 
     public void createAccount(String firstName, String lastName, String CPR, BigDecimal balance) throws BankServiceException_Exception {
-//        bank.retireAccount("ba584c1a-e23a-4d52-b3fe-a4501223bd3b");
+//        bank.retireAccount("a7110fec-943c-4343-8145-4cf737f182dd");
 //        for(AccountInfo accountInfo : bank.getAccounts()) {
 //            System.out.println(accountInfo.getAccountId() + " : " + accountInfo.getUser().getLastName());
 //        }

@@ -27,7 +27,7 @@ public class TokenService {
             returnEvent = new Event("TokensRequestedSucceeded", new Object[] {register.requestNewSet(userID)});
             queue.publish(returnEvent);
         } catch (ToManyTokensLeftException e) {
-            returnEvent = new Event("TokensRequestedSucceeded", new Object[] {e});
+            returnEvent = new Event("ToManyTokensLeft", new Object[] {});
             queue.publish(returnEvent);
         }
     }

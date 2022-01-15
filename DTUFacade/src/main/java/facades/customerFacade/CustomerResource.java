@@ -30,15 +30,16 @@ public class CustomerResource {
     }
 
     @POST
-    @Path("token")
+    @Path("tokens")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response requestTokens(String userID) {
-        CustomerFacade CF = new CustomerFacadeFactory().getFacade();
-        TokenList list = CF.requestTokens(userID);
-        if (list != null)
+        try {
+            CustomerFacade CF = new CustomerFacadeFactory().getFacade();
             return Response.status(Response.Status.ACCEPTED).entity(CF.requestTokens(userID)).build();
-        return Response.status(Response.Status.NOT_FOUND).build();
-
+        }
+        catch (Exception e) {
+            return Response.status(404).entity(e.getMessage()).build();
+        }
     }
 }

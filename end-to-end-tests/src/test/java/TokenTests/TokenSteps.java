@@ -37,7 +37,6 @@ public class TokenSteps {
     public void the_customer_request_new_tokens() {
         oldCount = cAPI.getTokens().size();
         message = cAPI.requestTokens(cAPI.getDTUPayID());
-        assertEquals("tokens received", message);
     }
     @Then("the customer receives {int} new tokens")
     public void the_customer_receives_new_tokens(Integer int1) {

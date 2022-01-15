@@ -2,6 +2,8 @@ package facades.customerFacade;
 
 import facades.DTO.RegistrationDTO;
 import facades.DTO.TokenList;
+import facades.exceptions.InvalidRegistrationInputException;
+import facades.exceptions.ToManyTokensLeftException;
 import messaging.Event;
 import messaging.MessageQueue;
 
@@ -17,7 +19,7 @@ public class CustomerFacade {
         queue = q;
         queue.addHandler("CustomerRegisteredSuccessfully", this::successfulCustomerRegistration);
         queue.addHandler("TokensRequestedSucceeded", this::successfulTokensRequest);
-        queue.addHandler("TokensRequestedFailed", this::failedTokensRequest);
+        queue.addHandler("ToManyTokensLeft", this::failedTokensRequest);
     }
 
     public String registerCustomer(RegistrationDTO regInfo) {
@@ -27,6 +29,7 @@ public class CustomerFacade {
         return future.join();
     }
 
+    //Used to request tokens from the Token microservice
     public TokenList requestTokens(String userID) {
         tokensRequested = new CompletableFuture<>();
         Event event = new Event("TokensRequested", new Object[]{userID});
@@ -34,14 +37,15 @@ public class CustomerFacade {
         return tokensRequested.join();
     }
 
+    //Handles if the TokenList gets send successfully
     public void successfulTokensRequest(Event e) {
         var tokens = e.getArgument(0, TokenList.class);
         tokensRequested.complete(tokens);
     }
 
+    //Handles if the TokenList does not get send successfully
     public void failedTokensRequest(Event e) {
-        var tokens = e.getArgument(0, String.class);
-        tokensRequested.complete(null);
+        tokensRequested.completeExceptionally(new ToManyTokensLeftException(e.getType()));
     }
 
     private void successfulCustomerRegistration(Event e) {

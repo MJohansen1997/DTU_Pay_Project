@@ -1,6 +1,9 @@
 package token.service;
 
 import token.service.DTO.TokenList;
+import token.service.exceptions.InvalidTokenException;
+import token.service.exceptions.ToManyTokensLeftException;
+import token.service.exceptions.UserNotFoundException;
 
 import java.util.ArrayList;
 import java.util.HashMap;

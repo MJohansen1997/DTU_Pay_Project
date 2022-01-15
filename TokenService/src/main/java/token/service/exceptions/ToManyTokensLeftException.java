@@ -1,4 +1,4 @@
-package token.service;
+package token.service.exceptions;
 
 public class ToManyTokensLeftException extends Exception {
     public ToManyTokensLeftException(String cause) {

@@ -2,6 +2,9 @@ package token.service;
 
 import messaging.Event;
 import messaging.MessageQueue;
+import token.service.exceptions.InvalidTokenException;
+import token.service.exceptions.ToManyTokensLeftException;
+import token.service.exceptions.UserNotFoundException;
 
 public class TokenService {
 
@@ -24,7 +27,7 @@ public class TokenService {
             returnEvent = new Event("TokensRequestedSucceeded", new Object[] {register.requestNewSet(userID)});
             queue.publish(returnEvent);
         } catch (ToManyTokensLeftException e) {
-            returnEvent = new Event("TokensRequestedFailed", new Object[] {e.getMessage()});
+            returnEvent = new Event("TokensRequestedSucceeded", new Object[] {e});
             queue.publish(returnEvent);
         }
     }

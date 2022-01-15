@@ -28,6 +28,7 @@ public class TokenSteps {
     public void that_the_customer_is_registered_with_dtu_pay() {
         cAPI.register();
     }
+
     @Given("the customer has {int} token left")
     public void the_customer_has_token_left(Integer int1) {
         // Make {int} ammount of payments
@@ -35,8 +36,8 @@ public class TokenSteps {
     @When("the customer request new Tokens")
     public void the_customer_request_new_tokens() {
         oldCount = cAPI.getTokens().size();
-        message = cAPI.requestTokens();
-        assertEquals(message, "success");
+        message = cAPI.requestTokens(cAPI.getDTUPayID());
+        assertEquals("tokens received", message);
     }
     @Then("the customer receives {int} new tokens")
     public void the_customer_receives_new_tokens(Integer int1) {
@@ -54,7 +55,9 @@ public class TokenSteps {
         try {
             cAPI.createAccount("Token", "Tokenson", "123499-1234", BigDecimal.valueOf(balance));
         }
-        catch (Exception ignored){}
+        catch (Exception ignored){
+            System.out.println(ignored.getMessage());
+        }
     }
 
     @And("that the customer is registered with DTU Pay")

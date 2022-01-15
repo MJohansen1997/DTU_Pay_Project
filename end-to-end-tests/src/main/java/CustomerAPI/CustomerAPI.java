@@ -1,9 +1,11 @@
 package CustomerAPI;
 
+import DTO.TokenList;
 import dtu.ws.fastmoney.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
@@ -22,21 +24,24 @@ public class CustomerAPI {
 
     BankService bank = new BankServiceService().getBankServicePort();
 
-    public String requestTokens(){
-        WebTarget target = client.target("http://localhost:8080/payment");
-        ArrayList<String> result;
+    public String requestTokens(String userID){
+        WebTarget target = client.target("http://localhost:8080/customer/token");
         try {
-            result = target.request(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.TEXT_PLAIN_TYPE)
-                    .get(new GenericType<>() {});
-            tokens.addAll(result);
-            return "success";
-        }catch (Exception exception) {
-            return "You still have at least 2 unused Tokens";
+            tokens = target.request(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .post(Entity.json(userID), TokenList.class).getTokens();
+            return "tokens received";
+        }catch (NotFoundException exception) {
+            //How does we handle exceptions here? HTTP or Custom exceptions?
+            return "tokens not received";
         }
     }
 
     public void createAccount(String firstName, String lastName, String CPR, BigDecimal balance) throws BankServiceException_Exception {
+//        bank.retireAccount("ba584c1a-e23a-4d52-b3fe-a4501223bd3b");
+//        for(AccountInfo accountInfo : bank.getAccounts()) {
+//            System.out.println(accountInfo.getAccountId() + " : " + accountInfo.getUser().getLastName());
+//        }
         ObjectFactory objectFactory = new ObjectFactory();
         User user = objectFactory.createUser();
         user.setFirstName(firstName);
@@ -50,7 +55,7 @@ public class CustomerAPI {
 //        String result = target.request(MediaType.APPLICATION_JSON)
 //                .accept(MediaType.TEXT_PLAIN_TYPE)
 //                .post(Entity.json(), String.class);
-        DTUPayID = "";
+        DTUPayID = "hej";
     }
 
     public void retireAccount() throws BankServiceException_Exception {
@@ -102,5 +107,13 @@ public class CustomerAPI {
 
     public HashMap<String, UserDTO> getCustomerList() {
         return customerList;
+    }
+
+    public String getDTUPayID() {
+        return DTUPayID;
+    }
+
+    public void setDTUPayID(String DTUPayID) {
+        this.DTUPayID = DTUPayID;
     }
 }

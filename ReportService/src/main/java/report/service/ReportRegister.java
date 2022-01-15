@@ -21,12 +21,14 @@ public class ReportRegister {
     public String createReport(ReportRequest request) throws IncorrectInformationException {
         CustomerReport customerReport = new CustomerReport();
 
+        customerReport.setPaymentID(request.getPaymentID());
         customerReport.setCustomerID(request.getCustomerID());
         customerReport.setMerchantID(request.getMerchantID());
         customerReport.setTokenID(request.getTokenID());
         customerReport.setBankID(request.getCustomerbankID());
         customerReport.setAmount(request.getAmount());
 
+        merchantReport.setPaymentID(request.getPaymentID());
         merchantReport.setMerchantID(request.getMerchantID());
         merchantReport.setTokenID(request.getTokenID());
         merchantReport.setBankID(request.getMerchantbankID());

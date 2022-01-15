@@ -7,6 +7,7 @@ public class ReportRequest implements Serializable {
 
     private static final long serialVersionUID = 9023222981284806610L;
 
+    String paymentID;
     String customerID;
     String merchantID;
     String tokenID;
@@ -14,13 +15,22 @@ public class ReportRequest implements Serializable {
     String merchantbankID;
     BigDecimal amount;
 
-    public ReportRequest(String customerID, String merchantID, String tokenID, String customerbankID, String merchantbankID, BigDecimal amount) {
+    public ReportRequest(String paymentID, String customerID, String merchantID, String tokenID, String customerbankID, String merchantbankID, BigDecimal amount) {
+        this.paymentID = paymentID;
         this.customerID = customerID;
         this.merchantID = merchantID;
         this.tokenID = tokenID;
         this.customerbankID = customerbankID;
         this.merchantbankID = merchantbankID;
         this.amount = amount;
+    }
+
+    public String getPaymentID() {
+        return paymentID;
+    }
+
+    public void setPaymentID(String paymentID) {
+        this.paymentID = paymentID;
     }
 
     public String getCustomerID() {

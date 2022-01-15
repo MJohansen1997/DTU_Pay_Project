@@ -4,18 +4,28 @@ import java.math.BigDecimal;
 
 public abstract class Report {
 
+    String paymentID;
     String merchantID;
     String tokenID;
     String bankID;
     BigDecimal amount;
 
-    public Report(String merchantID, String tokenID, String bankID, BigDecimal amount) {
+    public Report(String paymentID, String merchantID, String tokenID, String bankID, BigDecimal amount) {
+        this.paymentID = paymentID;
         this.merchantID = merchantID;
         this.tokenID = tokenID;
         this.bankID = bankID;
         this.amount = amount;
     }
     public Report(){}
+
+    public String getPaymentID() {
+        return paymentID;
+    }
+
+    public void setPaymentID(String paymentID) {
+        this.paymentID = paymentID;
+    }
 
     public String getMerchantID() {
         return merchantID;

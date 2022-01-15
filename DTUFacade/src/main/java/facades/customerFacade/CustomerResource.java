@@ -1,6 +1,7 @@
 package facades.customerFacade;
 
 import facades.DTO.RegistrationDTO;
+import facades.ICustomer;
 import studentregistration.service.Student;
 
 import javax.ws.rs.*;
@@ -8,8 +9,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("/customer")
-public class CustomerResource {
-
+public class CustomerResource{
 
     @POST
     @Path("register")
@@ -27,4 +27,5 @@ public class CustomerResource {
         }
         return Response.status(200).entity("User registered with id: " + id).build();
     }
+    
 }

@@ -1,4 +1,4 @@
-package token.service.adapter;
+package token.service.storage;
 
 import token.service.DTO.TokenList;
 import token.service.exceptions.UserNotFoundException;

@@ -4,11 +4,13 @@ import account.service.DTO.Account;
 import dtu.ws.fastmoney.BankService;
 import dtu.ws.fastmoney.BankServiceException_Exception;
 import dtu.ws.fastmoney.BankServiceService;
+import io.cucumber.java.hu.Ha;
 import messaging.Event;
 import messaging.MessageQueue;
 
 import javax.ws.rs.NotFoundException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.InvalidPropertiesFormatException;
 import java.util.concurrent.CompletableFuture;
 
@@ -18,6 +20,7 @@ public class AccountService {
     CompletableFuture<String> testFuture = new CompletableFuture<>();
     HashMap<String, Account> merchantList = new HashMap<>();
     HashMap<String, Account> customerList = new HashMap<>();
+    HashSet<String> bankIds = new HashSet<>();
     HashMap<String, String> testList = new HashMap<>();
 
 
@@ -33,17 +36,6 @@ public class AccountService {
         queue.addHandler("GetSpecificCustomer", this::customerRegister);
     }
 
-    public void merchantRegisterTest(Event event) {
-        System.out.println("in event");
-        String acc = event.getArgument(0,String.class);
-        System.out.println(acc);
-        String id = idGenerator.generateID("m");
-        System.out.println(acc + " " + id);
-        testList.put(id, acc);
-        Event tempEvent = new Event("MerchantRegisteredSuccessfully", new Object[] {id});
-        System.out.println("Event published");
-        queue.publish(tempEvent);
-    }
 
     public void merchantRegister(Event event) {
         try {
@@ -59,6 +51,7 @@ public class AccountService {
             acc.setRoleID(id);
             /* Saves the user */
             customerList.put(id, acc);
+            bankIds.add(acc.getBankID());
             /* Publishes event that the register happened successfully */
             Event tempEvent = new Event("MerchantRegisteredSuccessfully", new Object[] {id});
             queue.publish(tempEvent);
@@ -78,16 +71,18 @@ public class AccountService {
     public void customerRegister(Event event) {
         try {
             Account acc = event.getArgument(0, Account.class);
-            System.out.println("checking if bankid: " +acc.getBankID() + " exists");
-            bankService.getAccount(acc.getBankID());
-            System.out.println("Bank id found! Creating user");
 //        System.out.println("Printing events converted to acc: " + acc.toString());
-            /* Generating unique user id */
+            /* Validating input details */
+            validateBankDetails(acc);
             validateRegistrationInput(acc);
+
+            /* Generating unique user id */
             String id = idGenerator.generateID("c");
             acc.setRoleID(id);
+
             /* Saves the user */
             customerList.put(id, acc);
+            bankIds.add(acc.getBankID());
             /* Publishes event that the register happened successfully */
             Event tempEvent = new Event("CustomerRegisteredSuccessfully", new Object[] {id});
             queue.publish(tempEvent);
@@ -104,8 +99,18 @@ public class AccountService {
         }
     }
 
+    private void validateBankDetails(Account accToValidate) throws BankServiceException_Exception, InvalidPropertiesFormatException {
+        System.out.println("checking if bankid: " + accToValidate.getBankID() + " exists");
+        bankService.getAccount(accToValidate.getBankID());
+        System.out.println("checking if a user with the bankid already exists..");
+        if(bankIds.contains(accToValidate.getBankID())) {
+            throw new InvalidPropertiesFormatException("User with bank id: " + accToValidate.getBankID() + " already exists!");
+        };
+    }
     private void validateRegistrationInput(Account accToValidate) throws InvalidPropertiesFormatException {
         accToValidate.setCpr(accToValidate.getCpr().replace("-", ""));
+        if (merchantList.containsKey(accToValidate.getBankID()) || customerList.containsKey(accToValidate.getBankID()))
+            throw new InvalidPropertiesFormatException("A user with the bank id provided already exists");
         if(accToValidate.getCpr().isEmpty() || accToValidate.getFirstName().isEmpty() || accToValidate.getLastName().isEmpty())
             throw new InvalidPropertiesFormatException("Empty fields not allowed");
         if(accToValidate.getCpr().length() != 10) {

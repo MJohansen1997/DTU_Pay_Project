@@ -13,10 +13,12 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class TokenService implements ITokenService {
-    ITokenRepository repository = new TokenRepository();
+    private final ITokenRepository repository;
 
     //default constructor
-    public TokenService() {}
+    public TokenService() {
+        repository = new TokenRepository();
+    }
 
     @Override
     public TokenList createUser(String userID) {

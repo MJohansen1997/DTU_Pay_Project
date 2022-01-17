@@ -2,12 +2,12 @@ package account.service.repository;
 
 import account.service.DTO.Account;
 
+import javax.ws.rs.NotFoundException;
 import java.util.HashMap;
 import java.util.InvalidPropertiesFormatException;
 
 public interface IAccountRepository {
-    void updateList(Account account);
-    Account getSpecificUser(String userId, String role) throws InvalidPropertiesFormatException;
-    Boolean isBankIdAlreadyAssigned(String bankId, String role) throws InvalidPropertiesFormatException;
-
+    void addNewUser(Account account, String userId) throws IllegalArgumentException;
+    Account getSpecificUser(String userId) throws NotFoundException;
+    HashMap<String, Account> getUserList();
 }

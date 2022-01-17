@@ -2,8 +2,10 @@ package account.service.adapter;
 
 import account.service.AccountService;
 import account.service.DTO.Account;
+import account.service.exception.BankIdAlreadyRegisteredException;
+import account.service.exception.InvalidRegistrationInputException;
 import account.service.idGenerator;
-import account.service.port.IAccountService;
+import account.service.repository.AccountRepositoryAdapter;
 import dtu.ws.fastmoney.AccountInfo;
 import dtu.ws.fastmoney.BankServiceException_Exception;
 import messaging.Event;
@@ -22,7 +24,7 @@ public class AccountController
         HashMap<String, Account> customerList = new HashMap<>();
         HashMap<String, String> testList = new HashMap<>();
 
-        IAccountService accountService = new AccountService();
+        AccountService accountService = new AccountService(new AccountRepositoryAdapter());
 
 public AccountController(MessageQueue q) {
         queue = q;
@@ -36,26 +38,15 @@ public AccountController(MessageQueue q) {
         queue.addHandler("MerchantGetAccounts", this::handleMerchantGetAccounts);
         }
 
-public void merchantRegisterTest(Event event) {
-        System.out.println("in event");
-        String acc = event.getArgument(0,String.class);
-        System.out.println(acc);
-        String id = idGenerator.generateID("m");
-        System.out.println(acc + " " + id);
-        testList.put(id, acc);
-        Event tempEvent = new Event("MerchantRegisteredSuccessfully", new Object[] {id});
-        System.out.println("Event published");
-        queue.publish(tempEvent);
-        }
+
+
 
 public void merchantRegister(Event event) {
         try {
         Account acc = event.getArgument(0, Account.class);
-        System.out.println("checking if bankid: " +acc.getBankID() + " exists");
-        accountService.merchantRegister(acc);
-        System.out.println("Bank id found! Creating user");
+        accountService.registerUser(acc, "m");
+
 //        System.out.println("Printing events converted to acc: " + acc.toString());
-        validateRegistrationInput(acc);
 
         /* Generating unique user id */
         String id = idGenerator.generateID("m");
@@ -74,9 +65,11 @@ public void merchantRegister(Event event) {
         System.out.println("Wrong registration input");
         Event tempEvent = new Event("MerchantInvalidInput", new Object[] {});
         queue.publish(tempEvent);
+        } catch (BankIdAlreadyRegisteredException | InvalidRegistrationInputException e) {
+                e.printStackTrace();
         }
 
-        }
+}
 
 public void customerRegister(Event event) {
         try {

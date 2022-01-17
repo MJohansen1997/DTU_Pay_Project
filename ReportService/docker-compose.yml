@@ -1,0 +1,6 @@
+version: '3'
+services:
+  report-service-dtu:
+    image: report-service
+    build: .
+ 

@@ -5,11 +5,13 @@ import messaging.MessageQueue;
 import report.service.DTO.ReportRequest;
 import report.service.exception.IncorrectInformationException;
 import report.service.ReportService;
+import report.service.port.IReportService;
+import report.service.storage.ReportRepository;
 
 public class ReportController {
 
     MessageQueue queue;
-    ReportService service = new ReportService();
+    IReportService service = new ReportService(new ReportRepository());
 
     public ReportController(MessageQueue q) {
         queue = q;

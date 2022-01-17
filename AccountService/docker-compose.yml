@@ -1,0 +1,6 @@
+version: '3'
+services:
+  account-service-dtu:
+    image: account-service
+    build: .
+ 

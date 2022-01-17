@@ -14,8 +14,8 @@ public class TokenService implements ITokenService {
     private final ITokenRepository repository;
 
     //default constructor
-    public TokenService() {
-        repository = new TokenRepository();
+    public TokenService(ITokenRepository repository) {
+        this.repository = repository;
     }
 
     @Override

@@ -10,6 +10,11 @@ public class Payment implements Serializable {
     public BigDecimal amount;
     public String description;
     public String token;
+    public String errorMessage;
+
+    public String getErrorMessage() { return errorMessage; }
+
+    public void setErrorMessage(String errorMessage) { this.errorMessage = errorMessage; }
 
     public String getToken() {
         return token;

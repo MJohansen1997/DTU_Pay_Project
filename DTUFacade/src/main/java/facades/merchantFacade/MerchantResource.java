@@ -28,16 +28,20 @@ public class MerchantResource {
         return Response.status(200).entity("User registered with id: " + id).build();
     }
 
-    @Path("/payment")
+    @Path("payment")
     @POST
     @Consumes("application/json")
     @Produces("application/json")
-    public Payment payment(Payment payment) {
+    public Response payment(Payment payment) {
         String tokenID = payment.getToken();
         MerchantFacade CF = new MerchantFacadeFactory().getFacade();
-        //maybe do some checks here :-)
-        String userID = CF.consumeToken(tokenID);
-        payment.setDebitor(userID);
-        return CF.paymentMerchant(payment);
+        //String userID = CF.consumeToken(tokenID);
+        //payment.setDebitor(userID);
+        Payment p = CF.paymentMerchant(payment);
+        if(p.getErrorMessage()!=null){
+            return Response.status(404).entity(p.getErrorMessage()).build();
+        }else{
+            return Response.status(200).entity(payment).build();
+        }
     }
 }

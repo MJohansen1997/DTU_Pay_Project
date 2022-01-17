@@ -1,6 +1,7 @@
 package account.service;
 
 import account.service.DTO.Account;
+import dtu.ws.fastmoney.AccountInfo;
 import dtu.ws.fastmoney.BankService;
 import dtu.ws.fastmoney.BankServiceException_Exception;
 import dtu.ws.fastmoney.BankServiceService;
@@ -8,6 +9,8 @@ import messaging.Event;
 import messaging.MessageQueue;
 
 import javax.ws.rs.NotFoundException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.InvalidPropertiesFormatException;
 import java.util.concurrent.CompletableFuture;
@@ -31,6 +34,7 @@ public class AccountService {
         queue.addHandler("GetCustomerList", this::getCustomerList);
         queue.addHandler("GetSpecificMerchant", this::customerRegister);
         queue.addHandler("GetSpecificCustomer", this::customerRegister);
+        queue.addHandler("MerchantGetAccounts", this::handleMerchantGetAccounts);
     }
 
     public void merchantRegisterTest(Event event) {
@@ -127,5 +131,11 @@ public class AccountService {
     }
     public void getSpecificMerchant(Event event) {
 
+    }
+
+    public void handleMerchantGetAccounts(Event event) {
+        ArrayList<AccountInfo> accounts = (ArrayList<AccountInfo>) bankService.getAccounts();
+        event = new Event("MerchantGetAccountsSuccessful", new Object[] { accounts });
+        queue.publish(event);
     }
 }

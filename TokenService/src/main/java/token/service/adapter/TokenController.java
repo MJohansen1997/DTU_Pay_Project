@@ -6,11 +6,14 @@ import token.service.TokenService;
 import token.service.exceptions.InvalidTokenException;
 import token.service.exceptions.ToManyTokensLeftException;
 import token.service.exceptions.UserNotFoundException;
+import token.service.port.ITokenService;
+import token.service.storage.TokenRepository;
 
 public class TokenController {
 
     MessageQueue queue;
-    private final TokenService tokenService = new TokenService();
+
+    private final ITokenService tokenService = new TokenService(new TokenRepository());
 
     public TokenController(MessageQueue q) {
         queue = q;
@@ -46,8 +49,8 @@ public class TokenController {
         try {
             Event returnEvent = new Event("UserID fecthed", new Object[] {tokenService.consumeToken(s)});
             queue.publish(returnEvent);
-        } catch (InvalidTokenException e){
-            Event returnEvent = new Event("UserID fecthed", new Object[] {e.getMessage()});
+        } catch (InvalidTokenException | UserNotFoundException e){
+            Event returnEvent = new Event("TokenNotFound", new Object[] {e.getMessage()});
             queue.publish(returnEvent);
         }
     }

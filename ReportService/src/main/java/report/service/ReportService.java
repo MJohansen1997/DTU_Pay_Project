@@ -9,10 +9,10 @@ import report.service.port.IReportService;
 import java.util.ArrayList;
 
 public class ReportService implements IReportService {
-    IReportRepository repository;
+    private final IReportRepository repository;
 
-    public ReportService() {
-        repository = new ReportRepository();
+    public ReportService(IReportRepository repository) {
+        this.repository = repository;
     }
 
     public void createUser(String userid) {

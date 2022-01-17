@@ -4,14 +4,11 @@ import account.service.AccountService;
 import account.service.DTO.Account;
 import account.service.idGenerator;
 import account.service.port.IAccountService;
-
 import dtu.ws.fastmoney.AccountInfo;
 import dtu.ws.fastmoney.BankServiceException_Exception;
 import messaging.Event;
 import messaging.MessageQueue;
 
-import javax.ws.rs.NotFoundException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.InvalidPropertiesFormatException;

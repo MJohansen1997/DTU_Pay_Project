@@ -21,7 +21,7 @@ popd
 #./build.sh
 #popd
 
-pushd ReportServices
+pushd ReportService
 ./build.sh
 popd
 

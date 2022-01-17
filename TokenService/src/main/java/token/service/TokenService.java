@@ -1,22 +1,22 @@
 package token.service;
 
 import token.service.DTO.TokenList;
-import token.service.adapter.TokenRepository;
+import token.service.storage.TokenRepository;
 import token.service.exceptions.InvalidTokenException;
 import token.service.exceptions.ToManyTokensLeftException;
 import token.service.exceptions.UserNotFoundException;
 import token.service.port.ITokenRepository;
 import token.service.port.ITokenService;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
 public class TokenService implements ITokenService {
-    ITokenRepository repository = new TokenRepository();
+    private final ITokenRepository repository;
 
     //default constructor
-    public TokenService() {}
+    public TokenService() {
+        repository = new TokenRepository();
+    }
 
     @Override
     public TokenList createUser(String userID) {
@@ -34,7 +34,8 @@ public class TokenService implements ITokenService {
         //here we return a new list of Tokens
         return repository.updateTokenList(userID, generateNewSet(temp.getTokens().size()));
     }
-    
+
+    //method to consume a token so i can't be reused.
     public String consumeToken(String token) throws InvalidTokenException{
         try {
             return repository.consumeToken(token);

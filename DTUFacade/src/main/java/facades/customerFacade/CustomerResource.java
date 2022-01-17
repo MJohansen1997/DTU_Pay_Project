@@ -2,7 +2,6 @@ package facades.customerFacade;
 
 import facades.DTO.RegistrationDTO;
 import facades.DTO.TokenList;
-import studentregistration.service.Student;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

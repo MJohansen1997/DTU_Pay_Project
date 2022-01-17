@@ -1,12 +1,12 @@
 package adapter.rest;
 
 import messaging.implementations.RabbitMqQueue;
-import studentregistration.service.StudentRegistrationService;
+//import studentregistration.service.StudentRegistrationService;
 
 public class StudentRegistrationFactory {
-	static StudentRegistrationService service = null;
+	//static StudentRegistrationService service = null;
 
-	public StudentRegistrationService getService() {
+	/*public StudentRegistrationService getService() {
 		// The singleton pattern.
 		// Ensure that there is at most
 		// one instance of a PaymentService
@@ -26,5 +26,5 @@ public class StudentRegistrationFactory {
 		service = new StudentRegistrationService(mq);
 //		new StudentRegistrationServiceAdapter(service, mq);
 		return service;
-	}
+	}*/
 }

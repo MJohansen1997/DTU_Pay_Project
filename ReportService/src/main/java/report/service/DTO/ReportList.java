@@ -6,17 +6,25 @@ import java.util.ArrayList;
 public class ReportList implements Serializable {
     private static final long serialVersionUID = 9023222981284806610L;
 
-    private ArrayList<Report> Reports;
+    private ArrayList<Report> reports;
 
     public ReportList() {
-        this.Reports = new ArrayList<>();
+        this.reports = new ArrayList<>();
     }
 
     public ArrayList<Report> getReportList() {
-        return Reports;
+        return reports;
     }
 
     public void setReportList(ArrayList<Report> Reports) {
-        this.Reports = Reports;
+        this.reports = Reports;
+    }
+
+    public Report containsPayment(String ID) {
+        for (Report report : reports) {
+            if (report.paymentID.equals(ID))
+                return report;
+        }
+        return null;
     }
 }

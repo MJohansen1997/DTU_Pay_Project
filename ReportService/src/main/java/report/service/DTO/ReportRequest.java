@@ -11,17 +11,17 @@ public class ReportRequest implements Serializable {
     String customerID;
     String merchantID;
     String tokenID;
-    String customerbankID;
-    String merchantbankID;
+    String customerBankID;
+    String merchantBankID;
     BigDecimal amount;
 
-    public ReportRequest(String paymentID, String customerID, String merchantID, String tokenID, String customerbankID, String merchantbankID, BigDecimal amount) {
+    public ReportRequest(String paymentID, String customerID, String merchantID, String tokenID, String customerBankID, String merchantbankID, BigDecimal amount) {
         this.paymentID = paymentID;
         this.customerID = customerID;
         this.merchantID = merchantID;
         this.tokenID = tokenID;
-        this.customerbankID = customerbankID;
-        this.merchantbankID = merchantbankID;
+        this.customerBankID = customerBankID;
+        this.merchantBankID = merchantbankID;
         this.amount = amount;
     }
 
@@ -57,20 +57,20 @@ public class ReportRequest implements Serializable {
         this.tokenID = tokenID;
     }
 
-    public String getCustomerbankID() {
-        return customerbankID;
+    public String getCustomerBankID() {
+        return customerBankID;
     }
 
-    public void setCustomerbankID(String customerbankID) {
-        this.customerbankID = customerbankID;
+    public void setCustomerBankID(String customerBankID) {
+        this.customerBankID = customerBankID;
     }
 
-    public String getMerchantbankID() {
-        return merchantbankID;
+    public String getMerchantBankID() {
+        return merchantBankID;
     }
 
-    public void setMerchantbankID(String merchantbankID) {
-        this.merchantbankID = merchantbankID;
+    public void setMerchantBankID(String merchantBankID) {
+        this.merchantBankID = merchantBankID;
     }
 
     public BigDecimal getAmount() {

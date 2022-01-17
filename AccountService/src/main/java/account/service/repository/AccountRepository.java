@@ -14,10 +14,10 @@ public class AccountRepository implements IAccountRepository {
     @Getter @Setter HashMap<String, Account> merchantList = new HashMap<>();
     @Getter @Setter HashMap<String, Account> customerList = new HashMap<>();
     @Getter @Setter HashSet<String> bankIds = new HashSet<>();
-
+    
 
     @Override
-    public void updateList() {
+    public void updateList(Account account) {
 
     }
 

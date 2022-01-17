@@ -15,7 +15,7 @@ popd
 # Build the facade
 pushd DTUFacade
 ./build.sh
-popd 
+popd
 
 # Build the services
 #pushd AccountService

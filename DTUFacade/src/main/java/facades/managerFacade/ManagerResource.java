@@ -16,7 +16,8 @@ public class ManagerResource {
     @Produces("application/json")
     public Response getAccounts() {
         ManagerFacade managerFacade = new ManagerFacadeFactory().getFacade();
-        ArrayList<AccountInfo> accounts = managerFacade.getAccountsManager();
-        return Response.status(200).entity(accounts).build();
+//        ArrayList<AccountInfo> accounts = managerFacade.getAccountsManager();
+//        return Response.status(200).entity(accounts).build();
+        return Response.status(200).entity(null).build();
     }
 }

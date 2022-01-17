@@ -4,9 +4,9 @@ services:
     image: rabbitmq:3-management
     container_name: rabbitmq_container
     
-  dtu-facade:
-    image: dtu-facade
-    container_name: dtu-facade
+  dtu-facade-17:
+    image: dtu-facade-17
+    container_name: facade
     ports:
      - "8080:8080"
     

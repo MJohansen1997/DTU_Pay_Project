@@ -2,6 +2,7 @@ package facades.customerFacade;
 
 import facades.DTO.RegistrationDTO;
 import facades.DTO.TokenList;
+import facades.enums.UserType;
 import facades.exceptions.InvalidRegistrationInputException;
 import facades.exceptions.ToManyTokensLeftException;
 import facades.exceptions.InvalidRegistrationInputException;
@@ -28,7 +29,7 @@ public class CustomerFacade {
 
     public String registerCustomer(RegistrationDTO regInfo) {
         future = new CompletableFuture<>();
-        Event tempE = new Event("CustomerRegister", new Object[]{regInfo});
+        Event tempE = new Event("UserRegister", new Object[]{regInfo, UserType.CUSTOMER});
         queue.publish(tempE);
         return future.join();
     }

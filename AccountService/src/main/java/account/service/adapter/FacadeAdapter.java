@@ -3,17 +3,11 @@ package account.service.adapter;
 import account.service.AccountService;
 import account.service.DTO.Account;
 import account.service.exception.BankIdAlreadyRegisteredException;
+import account.service.exception.BankIdNotFoundException;
 import account.service.exception.InvalidRegistrationInputException;
 import account.service.exception.UserNotFoundException;
-import account.service.repository.AccountRepositoryAdapter;
-import dtu.ws.fastmoney.BankService;
-import dtu.ws.fastmoney.BankServiceService;
 import messaging.Event;
 import messaging.MessageQueue;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.concurrent.CompletableFuture;
 
 public class FacadeAdapter {
     MessageQueue queue;
@@ -22,14 +16,8 @@ public class FacadeAdapter {
     public FacadeAdapter(MessageQueue q, AccountService as) {
         queue = q;
         this.accountService = as;
-//        queue.addHandler("MerchantRegister", this::merchantRegister);
-//        queue.addHandler("MerchantRegister", this::merchantRegister);
-//        queue.addHandler("CustomerRegister", this::customerRegister);
-//        queue.addHandler("GetMerchantList", this::getMerchantList);
-//        queue.addHandler("GetCustomerList", this::getCustomerList);
-//        queue.addHandler("GetSpecificMerchant", this::getSpecificUser);
-//        queue.addHandler("GetSpecificCustomer", this::customerRegister);
 
+        /* Adding Handlers */
         queue.addHandler("UserRegister", this::registerUser);
         queue.addHandler("GetSpecificUserById", this::getSpecificUser);
 
@@ -39,11 +27,14 @@ public class FacadeAdapter {
         Account acc = event.getArgument(0, Account.class);
         String role = event.getArgument(1, String.class);
         try {
-            accountService.registerUser(acc, role);
-            Event temp = new Event(role+"RegisteredSuccessfully");
+            String id = accountService.registerUser(acc, role);
+            String complete = role+"RegisteredSuccessfully";
+            System.out.println(complete);
+            Event temp = new Event(complete, new Object[] {id});
             queue.publish(temp);
-        } catch (BankIdAlreadyRegisteredException | InvalidRegistrationInputException e) {
-            Event temp = new Event(role+e.getMessage());
+        } catch (BankIdAlreadyRegisteredException | InvalidRegistrationInputException | BankIdNotFoundException e) {
+            String incomplete = role+"UnsuccessfulRegistration";
+            Event temp = new Event(incomplete, new Object[] {e.getMessage()});
             queue.publish(temp);
         }
     }

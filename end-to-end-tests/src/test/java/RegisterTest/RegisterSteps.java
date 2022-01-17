@@ -28,7 +28,7 @@ public class RegisterSteps {
     @Before("@register")
     public void setupAccount() throws BankServiceException_Exception {
         try {
-            bankID = BankAccountManager.createAccount("Merchant", "Testing","1234bonko", new BigDecimal(69));
+            bankID = BankAccountManager.createAccount("Merchant", "Testing","bonkobonko", new BigDecimal(69));
         } catch (BankServiceException_Exception e) {
             System.out.println("error setting up: " + e.getMessage());
         }
@@ -56,11 +56,13 @@ public class RegisterSteps {
 
     @And("is given a customer id")
     public void isGivenACustomerId() {
+        assertNotEquals("404", roleID);
         assertTrue(cust.getCustomerList().containsKey(roleID));
     }
 
     @And("is given a Merchant id")
     public void isGivenAMerchantId() {
+        assertNotEquals("404", roleID);
         assertTrue(merc.getMerchantList().containsKey(roleID));
     }
 
@@ -89,7 +91,4 @@ public class RegisterSteps {
             System.out.println("error cleaning up: " + e.getMessage());
         }
     }
-
-
-
 }

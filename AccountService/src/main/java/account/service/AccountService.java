@@ -2,6 +2,7 @@ package account.service;
 
 import account.service.DTO.Account;
 import account.service.exception.BankIdAlreadyRegisteredException;
+import account.service.exception.BankIdNotFoundException;
 import account.service.exception.InvalidRegistrationInputException;
 import account.service.exception.UserNotFoundException;
 import account.service.port.IExternalService;
@@ -17,15 +18,19 @@ public class AccountService {
         this.service = service;
     }
 
-    public void registerUser(Account acc, String role) throws BankIdAlreadyRegisteredException, InvalidRegistrationInputException  {
+    public String registerUser(Account acc, String role) throws BankIdAlreadyRegisteredException, InvalidRegistrationInputException, BankIdNotFoundException {
         try {
+            System.out.println("før validate");
             validateBankDetails(acc);
+            System.out.println("efter bank validate");
             validateRegistrationInput(acc);
+            System.out.println("efter input validate");
             String id = idGenerator.generateID(role);
             service.registerUser(acc, id);
+            return id;
 
         } catch (BankServiceException_Exception e) {
-            e.printStackTrace();
+            throw new BankIdNotFoundException("BankIdNotFoundException:"+ "Bank id " + acc.getBankID() + " Does not exist.");
         }
     }
 
@@ -36,7 +41,6 @@ public class AccountService {
     private void validateBankDetails(Account accToValidate) throws BankServiceException_Exception {
         System.out.println("checking if bankid: " + accToValidate.getBankID() + " exists");
         bankService.getAccount(accToValidate.getBankID());
-        System.out.println("checking if a user with the bankid already exists..");
     }
 
     private void validateRegistrationInput(Account accToValidate) throws InvalidRegistrationInputException {

@@ -15,6 +15,7 @@ For example, the class name CucumberTests (Test with an s) will be ignored by Ma
         , publish= false
         , features = "classpath:features"  // directory of the feature files
         , snippets = SnippetType.CAMELCASE
+
 )
 public class CucumberTest {
 }

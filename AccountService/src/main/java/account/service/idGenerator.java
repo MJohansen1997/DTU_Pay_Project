@@ -6,11 +6,11 @@ public class idGenerator {
     public static String generateID(String role) {
         String id;
         switch (role) {
-            case "m":
+            case "Merchant":
                 id = UUID.randomUUID().toString();
                 System.out.println(id);
                 return ("m" + id);
-            case "c":
+            case "Customer":
                 id = UUID.randomUUID().toString();
                 System.out.println(id);
                 return ("c" + id);

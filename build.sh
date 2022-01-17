@@ -21,7 +21,7 @@ pushd PaymentService
 ./build.sh
 popd
 
-pushd ReportService
+pushd ReportServices
 ./build.sh
 popd
 

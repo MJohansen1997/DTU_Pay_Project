@@ -1,69 +1,70 @@
 package report.service;
 
-import messaging.Event;
-import messaging.MessageQueue;
-import report.service.DTO.ReportRequest;
+import report.service.DTO.*;
+import report.service.storage.ReportRepository;
+import report.service.exception.IncorrectInformationException;
+import report.service.port.IReportRepository;
+import report.service.port.IReportService;
 
-public class ReportService {
+import java.util.ArrayList;
 
-    MessageQueue queue;
-    ReportRegister register = new ReportRegister();
+public class ReportService implements IReportService {
+    IReportRepository repository;
 
-    public ReportService(MessageQueue q) {
-        queue = q;
-        queue.addHandler("CreateUserInReportRegister", this::handleCreateUserInReportRegister);
-        queue.addHandler("CreateReport", this::handleCreateReport);
-        queue.addHandler("ReportManager", this::handleReportManager);
-        queue.addHandler("ReportMerchant", this::handleReportMerchant);
-        queue.addHandler("ReportCustomer", this::handleReportCustomer);
+    public ReportService() {
+        repository = new ReportRepository();
     }
 
-    public void handleCreateUserInReportRegister(Event event){
-        var s = event.getArgument(0, String.class);
-        Event returnEvent;
-        returnEvent = new Event("CreateUserInReportRegister", new Object[] {register.insertUser(s)});
-        queue.publish(returnEvent);
+    public void createUser(String userid) {
+        repository.createReportList(userid);
     }
 
+    public Report createReport(ReportRequest request) throws IncorrectInformationException {
+        CustomerReport customerReport = new CustomerReport();
+        MerchantReport merchantReport = new MerchantReport();
 
-    public void handleCreateReport(Event event){
-        var s = event.getArgument(0, ReportRequest.class);
-        Event returnEvent;
+        customerReport.setPaymentID(request.getPaymentID());
+        customerReport.setCustomerID(request.getCustomerID());
+        customerReport.setMerchantID(request.getMerchantID());
+        customerReport.setTokenID(request.getTokenID());
+        customerReport.setBankID(request.getCustomerBankID());
+        customerReport.setAmount(request.getAmount());
+
+        merchantReport.setPaymentID(request.getPaymentID());
+        merchantReport.setMerchantID(request.getMerchantID());
+        merchantReport.setTokenID(request.getTokenID());
+        merchantReport.setBankID(request.getMerchantBankID());
+        merchantReport.setAmount(request.getAmount());
+
         try {
-            returnEvent = new Event("ReportCreated", new Object[] {register.createReport(s)});
-            queue.publish(returnEvent);
-        } catch (IncorrectInformationException e) {
-            returnEvent = new Event("ReportNotCreated", new Object[] {e.getMessage()});
-            queue.publish(returnEvent);
+            repository.addReport(request.getCustomerID(), customerReport);
+        } catch (IncorrectInformationException ignored) {
+            throw new IncorrectInformationException("Customer doesn't exist");
         }
-    }
-
-    public void handleReportManager(Event event){
-        Event returnEvent;
-        returnEvent = new Event("AllReportsRequestedSucceeded", new Object[] {register.getReportsForManager()});
-        queue.publish(returnEvent);
-    }
-    public void handleReportMerchant(Event event){
-
-        var s = event.getArgument(0, String.class);
-        Event returnEvent;
         try {
-            returnEvent = new Event("MerchantReportSent", new Object[] {register.getReportForMerchant(s)});
-            queue.publish(returnEvent);
-        } catch (IncorrectInformationException e) {
-            returnEvent = new Event("MerchantReportNotSent", new Object[] {e.getMessage()});
-            queue.publish(returnEvent);
+            repository.addReport(request.getMerchantID(), merchantReport);
+        } catch (IncorrectInformationException ignored) {
+            throw new IncorrectInformationException("merchant doesn't exist");
         }
+        return merchantReport;
     }
-    public void handleReportCustomer(Event event){
-        var s = event.getArgument(0, String.class);
-        Event returnEvent;
-        try {
-            returnEvent = new Event("CustomerReportSent", new Object[] {register.getReportForCustomer(s)});
-            queue.publish(returnEvent);
-        } catch (IncorrectInformationException e) {
-            returnEvent = new Event("CustomerReportNotSent", new Object[] {e.getMessage()});
-            queue.publish(returnEvent);
+
+
+    public ArrayList<Report> getManagerReports() {
+        ArrayList<ReportList> temp = repository.getReports();
+        ArrayList<Report> results = new ArrayList<>();
+
+        for (ReportList reportList : temp ) {
+            results.addAll(reportList.getReportList());
+        }
+        return results;
+    }
+
+    public ReportList getReportsByID(String userID) throws IncorrectInformationException {
+        try{
+            return repository.getReportsByUser(userID);
+        }catch (IncorrectInformationException e){
+            throw new IncorrectInformationException("Merchant doesn't exist");
         }
     }
 }

@@ -1,6 +1,7 @@
 package report.service;
 
 import messaging.implementations.RabbitMqQueue;
+import report.service.adapter.ReportController;
 
 
 public class StartUp {
@@ -11,6 +12,6 @@ public class StartUp {
     private void startUp() throws Exception {
         System.out.println("startup");
         var mq = new RabbitMqQueue("localhost");
-        new ReportService(mq);
+        new ReportController(mq);
     }
 }

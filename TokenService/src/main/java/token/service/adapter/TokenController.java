@@ -9,9 +9,8 @@ import token.service.exceptions.UserNotFoundException;
 
 public class TokenController {
 
-    private TokenService TokenService;
     MessageQueue queue;
-    token.service.TokenService register = new TokenService();
+    private final TokenService tokenService = new TokenService();
 
     public TokenController(MessageQueue q) {
         queue = q;
@@ -23,7 +22,7 @@ public class TokenController {
 
     public void handleCreationRequest(Event event) {
         var userID = event.getArgument(0, String.class);
-        register.createUser(userID);
+        tokenService.createUser(userID);
     }
 
     public void handleTokensRequested(Event event) {
@@ -31,7 +30,7 @@ public class TokenController {
         var userID = event.getArgument(0, String.class);
         Event returnEvent;
         try {
-            returnEvent = new Event("TokensRequestedSucceeded", new Object[] {register.requestNewSet(userID)});
+            returnEvent = new Event("TokensRequestedSucceeded", new Object[] {tokenService.requestNewSet(userID)});
             queue.publish(returnEvent);
         } catch (ToManyTokensLeftException e) {
             returnEvent = new Event("ToManyTokensLeft", new Object[] {});
@@ -45,7 +44,7 @@ public class TokenController {
     public void handleConsumeTokenRequested(Event event) {
         var s = event.getArgument(0, String.class);
         try {
-            Event returnEvent = new Event("UserID fecthed", new Object[] {register.consumeToken(s)});
+            Event returnEvent = new Event("UserID fecthed", new Object[] {tokenService.consumeToken(s)});
             queue.publish(returnEvent);
         } catch (InvalidTokenException e){
             Event returnEvent = new Event("UserID fecthed", new Object[] {e.getMessage()});
@@ -56,7 +55,7 @@ public class TokenController {
     public void handleTokensFromUserID(Event event) {
         var s = event.getArgument(0, String.class);
         try {
-            Event returnEvent = new Event("Tokens fetched", new Object[] {register.getTokensFromUserID(s)});
+            Event returnEvent = new Event("Tokens fetched", new Object[] {tokenService.getTokensFromUserID(s)});
             queue.publish(returnEvent);
         } catch(UserNotFoundException e) {
             Event returnEvent = new Event("Tokens fetched", new Object[] {e.getMessage()});

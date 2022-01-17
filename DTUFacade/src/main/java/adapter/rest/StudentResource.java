@@ -2,13 +2,13 @@ package adapter.rest;
 
 import javax.ws.rs.*;
 
-import studentregistration.service.Student;
-import studentregistration.service.StudentRegistrationService;
+//import studentregistration.service.Student;
+//import studentregistration.service.StudentRegistrationService;
 
-@Path("/students")
+//@Path("/students")
 public class StudentResource {
 
-	@POST
+	/*@POST
 	@Consumes("application/json")
 	@Produces("application/json")
 	public Student registerStudent(Student student) {
@@ -23,6 +23,6 @@ public class StudentResource {
 		student.setId("123");
 		student.setName("mikkel");
 		return student;
-	}
+	}*/
 
 }

@@ -12,6 +12,11 @@ popd
 #./build.sh
 #popd
 
+# Build the facade
+pushd DTUFacade
+./build.sh
+popd 
+
 # Build the services
 #pushd AccountService
 #./build.sh

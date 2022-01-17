@@ -13,18 +13,18 @@ pushd BankService
 popd
 
 # Build the services
-pushd account-service-dtu
+pushd AccountService
 ./build.sh
 popd
 
-pushd payment-service-dtu
+pushd PaymentService
 ./build.sh
 popd
 
-pushd report-service-dtu
+pushd ReportService
 ./build.sh
 popd
 
-pushd token-service-dtu
+pushd TokenService
 ./build.sh
 popd 

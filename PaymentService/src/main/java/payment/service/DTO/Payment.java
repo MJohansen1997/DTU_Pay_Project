@@ -9,6 +9,19 @@ public class Payment implements Serializable {
     public String creditor;
     public BigDecimal amount;
     public String description;
+    public String errorMessage;
+
+    public Payment(String debitor, String creditor, BigDecimal amount, String description, String errorMessage) {
+        this.debitor = debitor;
+        this.creditor = creditor;
+        this.amount = amount;
+        this.description = description;
+        this.errorMessage = errorMessage;
+    }
+
+    public String getErrorMessage() { return errorMessage; }
+
+    public void setErrorMessage(String errorMessage) { this.errorMessage = errorMessage; }
 
     public String getDebitor() {
         return debitor;

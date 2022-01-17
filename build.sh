@@ -8,18 +8,18 @@ pushd messaging-utilities-3.2
 ./build.sh
 popd
 
-pushd BankService
-./build.sh
-popd
+#pushd BankService
+#./build.sh
+#popd
 
 # Build the services
-pushd AccountService
-./build.sh
-popd
+#pushd AccountService
+#./build.sh
+#popd
 
-pushd PaymentService
-./build.sh
-popd
+#pushd PaymentService
+#./build.sh
+#popd
 
 pushd ReportServices
 ./build.sh

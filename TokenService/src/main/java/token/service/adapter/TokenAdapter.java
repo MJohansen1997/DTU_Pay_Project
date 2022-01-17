@@ -9,13 +9,14 @@ import token.service.exceptions.UserNotFoundException;
 import token.service.port.ITokenService;
 import token.service.storage.TokenRepository;
 
-public class TokenController {
+public class TokenAdapter {
 
     MessageQueue queue;
 
-    private final ITokenService tokenService = new TokenService(new TokenRepository());
+    private final ITokenService tokenService;
 
-    public TokenController(MessageQueue q) {
+    public TokenAdapter(MessageQueue q, ITokenService service) {
+        tokenService = service;
         queue = q;
         queue.addHandler("CustomerRegisteredSuccessfully", this::handleCreationRequest);
         queue.addHandler("TokensRequested", this::handleTokensRequested);

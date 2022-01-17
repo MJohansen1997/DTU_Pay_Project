@@ -1,7 +1,8 @@
 package token.service;
 
 import messaging.implementations.RabbitMqQueue;
-import token.service.adapter.TokenController;
+import token.service.adapter.TokenAdapter;
+import token.service.storage.TokenRepository;
 
 public class StartUp {
     public static void main(String[] args) throws Exception {
@@ -11,6 +12,7 @@ public class StartUp {
     private void startUp() throws Exception {
         System.out.println("startup");
         var mq = new RabbitMqQueue("localhost");
-        new TokenController(mq);
+        var service = new TokenService(new TokenRepository());
+        new TokenAdapter(mq, service);
     }
 }

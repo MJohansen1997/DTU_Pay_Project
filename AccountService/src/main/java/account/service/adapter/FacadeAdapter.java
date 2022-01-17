@@ -24,11 +24,12 @@ public class FacadeAdapter {
     HashSet<String> bankIds = new HashSet<>();
     HashMap<String, String> testList = new HashMap<>();
 
-    AccountService accountService = new AccountService(new AccountRepositoryAdapter());
+    AccountService accountService;
 
 
-    public FacadeAdapter(MessageQueue q) {
+    public FacadeAdapter(MessageQueue q, AccountService as) {
         queue = q;
+        this.accountService = as;
 //        queue.addHandler("MerchantRegister", this::merchantRegister);
 //        queue.addHandler("MerchantRegister", this::merchantRegister);
 //        queue.addHandler("CustomerRegister", this::customerRegister);

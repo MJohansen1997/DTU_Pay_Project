@@ -1,5 +1,6 @@
 package account.service;
 import account.service.adapter.FacadeAdapter;
+import account.service.repository.AccountRepositoryAdapter;
 import messaging.implementations.RabbitMqQueue;
 
 public class StartUp {
@@ -10,6 +11,6 @@ public class StartUp {
         private void startUp() throws Exception {
             System.out.println("startup");
             var mq = new RabbitMqQueue("localhost");
-            new FacadeAdapter(mq);
+            new FacadeAdapter(mq, new AccountService(new AccountRepositoryAdapter()));
         }
 }

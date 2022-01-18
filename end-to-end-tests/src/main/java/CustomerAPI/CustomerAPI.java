@@ -38,23 +38,6 @@ public class CustomerAPI {
             return "Tokens not received";
         }
     }
-    //test commit
-    public void createAccount(String firstName, String lastName, String CPR, BigDecimal balance) throws BankServiceException_Exception {
-//        bank.retireAccount("a7110fec-943c-4343-8145-4cf737f182dd");
-//        for(AccountInfo accountInfo : bank.getAccounts()) {
-//            System.out.println(accountInfo.getAccountId() + " : " + accountInfo.getUser().getLastName());
-//        }
-        ObjectFactory objectFactory = new ObjectFactory();
-        User user = objectFactory.createUser();
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setCprNumber(CPR);
-        bankID = bank.createAccountWithBalance(user,balance);
-    }
-
-    public void retireAccount() throws BankServiceException_Exception {
-        bank.retireAccount(bankID);
-    }
 
 
     public ArrayList<String> getTokens() {
@@ -74,7 +57,7 @@ public class CustomerAPI {
     }
 
     public String registerCustomer(UserDTO user) {
-        WebTarget target = client.target("http://localhost:8080/customer/account");
+        WebTarget target = client.target("http://localhost:8080/customer/register");
         String result;
         try {
             result = target.request(MediaType.APPLICATION_JSON)
@@ -85,27 +68,10 @@ public class CustomerAPI {
             customerList.put(result, user);
             setDTUPayID(registerID);
             return registerID;
+
         }catch (Exception exception) {
-            return "wrong input";
+            return "404";
         }
-//        /* If non valid bank account id throw exception */
-//        if(user.getBankID().equals("0") || user.getFirstName().isEmpty()) {
-//            return "404";
-//        }
-
-
-    }
-
-    public String getBankID() {
-        return bankID;
-    }
-
-    public void setBankID(String bankID) {
-        this.bankID = bankID;
-    }
-
-    public Account getAccount(String accountID) throws BankServiceException_Exception {
-        return bank.getAccount(accountID);
     }
 
     public HashMap<String, UserDTO> getCustomerList() {

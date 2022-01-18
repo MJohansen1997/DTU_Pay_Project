@@ -2,22 +2,12 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/AccountService/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/AccountService/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/BankService/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/BankService/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/DTUFacade/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/DTUFacade/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/PaymentService/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/PaymentService/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ReportService/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ReportService/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/TokenService/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/TokenService/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/end-to-end-tests/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/end-to-end-tests/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/messaging-utilities-3.2/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/messaging-utilities-3.2/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
   </component>
 </project>

@@ -2,6 +2,9 @@ package facades.merchantFacade;
 
 import facades.DTO.Payment;
 import facades.DTO.RegistrationDTO;
+import facades.managerFacade.ManagerFacade;
+import facades.managerFacade.ManagerFacadeFactory;
+import facades.managerFacade.ReportList;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -40,5 +43,14 @@ public class MerchantResource {
         }else{
             return Response.status(200).entity(payment).build();
         }
+    }
+    @Path("report")
+    @GET
+    @Produces("application/json")
+    public Response getReports(String paymentID) {
+        MerchantFacade MF = new MerchantFacadeFactory().getFacade();
+        ReportList reportList = MF.reportListRecived(paymentID);
+
+        return Response.status(200).entity(reportList).build();
     }
 }

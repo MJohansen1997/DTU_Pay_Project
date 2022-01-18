@@ -1,25 +1,20 @@
 Feature: Report
   
   @report
-  Scenario: The Report for the manager
-    Given The user is a "manager"
-    Then the "manager" request the reportlist
-    And the reportlist should contain all reports
+  Scenario: There is two reports with the same paymentID that the manager can see
+    Given the manager request the reportlist
+    Then the reportlist should contain two reports with the same paymentID
 
   @report
-  Scenario: Two reports are created after a transaction
-    Given a successful transaction
-    Then a customer report is created for the transaction
-    And a merchant report is created for the transaction
+  Scenario: Uniq customer report
+    Given a report has paymentID
+    And the report has a customerID
+    Then the report is a customer report
 
   @report
-  Scenario: The Report for the customer
-    Given the user is a "customer"
-    Then the "customer" requests the report
-    And the report should contain all of the "customer" transaction details
-
-  @report
-  Scenario: The report for the merchant
-    Given the user is a "merchant"
-    Then the "merchant" requsts the reportlist
-    And the report should contain all of the "merchant" transaction details
+  Scenario: Uniq merchent report
+    Given a report has paymentID
+    And the report doesnt have a customerID
+    Then the report is a merchant report  
+    
+    

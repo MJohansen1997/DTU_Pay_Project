@@ -1,4 +1,4 @@
-package DTO;
+package DTO.Report;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,13 +11,12 @@ import java.math.BigDecimal;
 //@Data // Automatic getter and setters and equals etc
 @NoArgsConstructor // Needed for JSON deserialization and XML serialization and deserialization
 @AllArgsConstructor
+
 public @Data
-class Report {
+abstract class Report {
     String paymentID;
-    String customerID;
     String merchantID;
     String tokenID;
-    String customerBankID;
-    String merchantBankID;
+    String bankID;
     BigDecimal amount;
 }

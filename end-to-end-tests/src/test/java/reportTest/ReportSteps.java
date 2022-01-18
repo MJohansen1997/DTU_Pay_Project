@@ -2,14 +2,16 @@ package reportTest;
 
 import CustomerAPI.CustomerAPI;
 import DTO.ManagerReportDTO;
-import DTO.ReportList;
+import DTO.Report.ReportList;
+import DTO.Report.ReportManager;
 import ManagerAPI.ManagerAPI;
 import MerchantAPI.MerchantAPI;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 import org.junit.Before;
+
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,79 +23,40 @@ public class ReportSteps {
     CustomerAPI cusAPI = new CustomerAPI();
     ReportList rList = new ReportList();
 
-
-    //  Scenario: The Report for the manager
-    @Given("The user is a {string}")
-    public void theUserIsAManager(String user) {
-        assertEquals("manager", user);
+    @Given("the manager request the reportlist")
+    public void theManagerRequestTheReportlist() {
+        rList = mAPI.requestManagerReports();
     }
 
-    @Then("the {string} request the reportlist")
-    public void theManagerRequestTheReportlist(String user) {
-        if (user.equals("manager"))
-            rList = mAPI.requestReports();
+    @Then("the reportlist should contain two reports with the same paymentID")
+    public void theReportlistShouldContainTwoReportsWithTheSamePaymentIDWhichIs() {
+       ArrayList<ReportManager> manArray = rList.getReportList();
+        assertEquals(manArray.get(0).getPaymentID(), manArray.get(1).getPaymentID());
     }
 
-    @And("the reportlist should contain all reports")
-    public void theReportlistShouldContain(ReportList reportList) {
-        assertEquals(rList.getReportList().size(), reportList.getReportList().size());
-    }
-    //  Scenario END
-
-    //  Scenario: Two reports are created after a transaction
-    @Given("a transaction succeded")
-    public void aTransactionSucceded() {
+    @Given("a report has paymentID")
+    public void aReportHasPaymentID() {
+        mAPI.requestCustomerReports().getPaymentID();
     }
 
-    @Then("a customer report is created for the transaction")
-    public void aCustomerReportIsCreatedForTheTransaction() {
+    @And("the report has a customerID")
+    public void theReportHasACustomerID() {
+        mAPI.requestCustomerReports().getCustomerID();
     }
 
-    @And("a merchant report is created for the transaction")
-    public void aMerchantReportIsCreatedForTheTransaction() {
-    }
-    //  Scenario END
-
-    //  Scenario: The report for the customer
-
-    @Before("@report")
-    public void setupTransaction() {
-
+    @Then("the report is a customer report")
+    public void theReportIsACustomerReport() {
+        mAPI.requestManagerReports().getReportList().get(0);
     }
 
-    @Given("the user is a {string}")
-    public void theUserIsACustomer(String user) {
-        assertEquals("customer", user);
+    //not done
+    @And("the report doesnt have a customerID")
+    public void theReportDoesntHaveACustomerID() {
+        assertFalse(mAPI.requestCustomerReports().getCustomerID().equals(mAPI.requestMerchantReports().getMerchantID()));
     }
 
-    @Then("the {string} requests the report")
-    public void theRequestsTheReport(String user) {
+    @Then("the report is a merchant report")
+    public void theReportIsAMerchantReport() {
+        mAPI.requestManagerReports().getReportList().get(1);
     }
-
-    @And("the report should contain all of the {string} transaction details")
-    public void theReportShouldContainAllOfTheTransactionDetails(String user) {
-    }
-    //  Scenario END
-
-    //  Scenario: The report for the merchant
-
-    @Before("@report")
-    public void setupTransaction() {
-
-    }
-
-    @Given("the user is a {string}")
-    public void theUserIsAMerchant(String user) {
-        assertEquals("merchant", user);
-    }
-
-    @Then("the {string} request the reportlist")
-    public void theMerchantRequestTheReportlist(String merchant) {
-        merAPI.requestMerchantReports();
-    }
-
-    @And("the report should contain all of the {string} transaction details")
-    public void theReportListContainsAllReports(String user) {
-    }
-    //  Scenario END
 }

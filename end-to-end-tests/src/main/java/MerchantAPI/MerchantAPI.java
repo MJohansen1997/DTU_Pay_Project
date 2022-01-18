@@ -1,6 +1,6 @@
 package MerchantAPI;
 
-import DTO.ReportList;
+import DTO.Report.ReportList;
 import DTO.UserDTO;
 
 import javax.ws.rs.NotFoundException;
@@ -8,7 +8,6 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import java.util.HashMap;
 

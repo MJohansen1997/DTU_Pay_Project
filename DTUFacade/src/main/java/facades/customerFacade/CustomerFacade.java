@@ -5,6 +5,7 @@ import facades.DTO.TokenList;
 import facades.enums.UserType;
 import facades.exceptions.RegistrationException;
 import facades.exceptions.ToManyTokensLeftException;
+import facades.managerFacade.ReportList;
 import messaging.Event;
 import messaging.MessageQueue;
 
@@ -14,6 +15,7 @@ public class CustomerFacade {
     private MessageQueue queue;
     private CompletableFuture<String> future;
     private CompletableFuture<TokenList> tokensRequested;
+    private CompletableFuture<ReportList> reportRequested;
 
     public CustomerFacade(MessageQueue q) {
         queue = q;
@@ -60,5 +62,12 @@ public class CustomerFacade {
     }
     private void unsuccessfulCustomerRegistration(Event e) {
         future.completeExceptionally(new RegistrationException(e.getArgument(0, String.class)));
+    }
+
+    public ReportList reportListRecived(String paymentID) {
+        reportRequested = new CompletableFuture<>();
+        Event event = new Event("ReportCustomer", new Object[] { paymentID });
+        queue.publish(event);
+        return reportRequested.join();
     }
 }

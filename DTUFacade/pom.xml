@@ -117,11 +117,13 @@
 			<artifactId>messaging-utilities</artifactId>
 			<version>3.2</version>
 		</dependency>
+		<!--
 		<dependency>
 			<groupId>timm.dtu.dk</groupId>
 			<artifactId>Bankservice</artifactId>
 			<version>1.0</version>
 		</dependency>
+		-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

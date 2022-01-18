@@ -2,7 +2,6 @@
   <configuration default="false" name="Project" type="CompoundRunConfigurationType">
     <toRun name="PaymentStartUp" type="Application" />
     <toRun name="ReportStartUp" type="Application" />
-    <toRun name="DTUFacade" type="QuarkusRunConfigurationType" />
     <toRun name="AccountStartUp" type="Application" />
     <toRun name="TokenStartUp" type="Application" />
     <method v="2" />

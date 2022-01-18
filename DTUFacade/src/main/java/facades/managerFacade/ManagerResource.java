@@ -11,12 +11,13 @@ import java.util.ArrayList;
 @Path("/manager")
 public class ManagerResource {
 
-    @Path("accounts")
+    @Path("reports")
     @GET
     @Produces("application/json")
-    public Response getAccounts() {
-        ManagerFacade managerFacade = new ManagerFacadeFactory().getFacade();
-        ArrayList<AccountInfo> accounts = managerFacade.getAccountsManager();
-        return Response.status(200).entity(accounts).build();
+    public Response getReports() {
+        ManagerFacade MF = new ManagerFacadeFactory().getFacade();
+        ReportList reportList = MF.reportListRecived();
+
+        return Response.status(200).entity(reportList).build();
     }
 }

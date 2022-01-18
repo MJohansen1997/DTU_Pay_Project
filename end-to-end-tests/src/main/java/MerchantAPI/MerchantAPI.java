@@ -1,7 +1,9 @@
 package MerchantAPI;
 
+import DTO.ReportList;
 import DTO.UserDTO;
 
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
@@ -33,5 +35,21 @@ public class MerchantAPI {
 
     public HashMap<String, UserDTO> getMerchantList() {
         return merchantList;
+    }
+
+    ReportList reports = new ReportList();
+
+    //Doesnt take any id yet
+    public ReportList requestMerchantReports() {
+        WebTarget target = client.target("http://localhost:8080/merchant/reports");
+        try {
+            reports = target.request()
+                    .accept(MediaType.APPLICATION_JSON)
+                    .get(ReportList.class);
+            return reports;
+        } catch (NotFoundException exception) {
+            //How does we handle exceptions here? HTTP or Custom exceptions?
+            throw new NotFoundException("Reports doesn't exist");
+        }
     }
 }

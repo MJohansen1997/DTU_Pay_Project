@@ -17,7 +17,9 @@ public abstract class Report {
         this.bankID = bankID;
         this.amount = amount;
     }
-    public Report(){}
+
+    public Report() {
+    }
 
     public String getPaymentID() {
         return paymentID;

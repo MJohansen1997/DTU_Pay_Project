@@ -10,23 +10,32 @@ import java.util.concurrent.CompletableFuture;
 
 public class ManagerFacade {
     private MessageQueue queue;
-    private CompletableFuture<ArrayList<AccountInfo>> accountFuture;
+    private CompletableFuture<String> future;
+    private CompletableFuture<ReportList> reportRequested;
 
     public ManagerFacade(MessageQueue q) {
         queue = q;
-        queue.addHandler("MerchantGetAccountsSuccessful", this::successfulMerchantGetAccounts);
+        queue.addHandler("ReportsRequestedSucceeded", this::succesfulReportRequested);
     }
 
-    private void successfulMerchantGetAccounts(Event e) {
-        var id = e.getArgument(0, new ArrayList<AccountInfo>().getClass());
-        accountFuture.complete(id);
+
+    private void succesfulReportRequested(Event e) {
+        var report = e.getArgument(0, ReportList.class);
+        reportRequested.complete(report);
     }
 
-    public ArrayList<AccountInfo> getAccountsManager() {
-        accountFuture = new CompletableFuture<>();
-        Event tempE = new Event("MerchantGetAccounts",  new Object[] { });
-        queue.publish(tempE);
-        return accountFuture.join();
+    public ReportList reportListRecived() {
+        reportRequested = new CompletableFuture<>();
+        Event event = new Event("ReportManager", new Object[] {  });
+        queue.publish(event);
+        return reportRequested.join();
     }
+
+//    public ArrayList<AccountInfo> getAccountsManager() {
+//        reportFuture = new CompletableFuture<>();
+//        Event tempE = new Event("MerchantGetAccounts",  new Object[] { });
+//        queue.publish(tempE);
+//        return reportFuture.join();
+//    }
 
 }

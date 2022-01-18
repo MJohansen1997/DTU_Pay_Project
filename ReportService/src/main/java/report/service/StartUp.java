@@ -1,7 +1,8 @@
 package report.service;
 
 import messaging.implementations.RabbitMqQueue;
-import report.service.adapter.ReportController;
+import report.service.adapter.ReportAdapter;
+import report.service.storage.ReportRepository;
 
 
 public class StartUp {
@@ -12,6 +13,7 @@ public class StartUp {
     private void startUp() throws Exception {
         System.out.println("startup");
         var mq = new RabbitMqQueue("localhost");
-        new ReportController(mq);
+        var service = new ReportService(new ReportRepository());
+        new ReportAdapter(mq, service);
     }
 }

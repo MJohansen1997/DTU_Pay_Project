@@ -1,7 +1,6 @@
 package report.service;
 
 import report.service.DTO.*;
-import report.service.storage.ReportRepository;
 import report.service.exception.IncorrectInformationException;
 import report.service.port.IReportRepository;
 import report.service.port.IReportService;
@@ -11,8 +10,8 @@ import java.util.ArrayList;
 public class ReportService implements IReportService {
     IReportRepository repository;
 
-    public ReportService() {
-        repository = new ReportRepository();
+    public ReportService(IReportRepository repository) {
+        this.repository = repository;
     }
 
     public void createUser(String userid) {
@@ -50,12 +49,12 @@ public class ReportService implements IReportService {
     }
 
 
-    public ArrayList<Report> getManagerReports() {
+    public ReportList getManagerReports() {
         ArrayList<ReportList> temp = repository.getReports();
-        ArrayList<Report> results = new ArrayList<>();
+        ReportList results = new ReportList();
 
         for (ReportList reportList : temp ) {
-            results.addAll(reportList.getReportList());
+            results.getReportList().addAll(reportList.getReportList());
         }
         return results;
     }

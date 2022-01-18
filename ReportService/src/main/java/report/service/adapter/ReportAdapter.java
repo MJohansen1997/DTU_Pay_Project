@@ -5,18 +5,20 @@ import messaging.MessageQueue;
 import report.service.DTO.ReportRequest;
 import report.service.exception.IncorrectInformationException;
 import report.service.ReportService;
+import report.service.port.IReportService;
 
-public class ReportController {
+public class ReportAdapter {
 
     MessageQueue queue;
-    ReportService service = new ReportService();
+    IReportService service;
 
-    public ReportController(MessageQueue q) {
+    public ReportAdapter(MessageQueue q, ReportService service) {
         queue = q;
         queue.addHandler("CustomerRegisteredSuccessfully", this::handleCreateUserInReportRegister);
         queue.addHandler("ReportCreationRequest", this::handleCreateReport);
         queue.addHandler("ReportManager", this::handleReportManager);
         queue.addHandler("ReportsRequest", this::handleReportRequest);
+        this.service = service;
     }
 
     public void handleCreateUserInReportRegister(Event event){

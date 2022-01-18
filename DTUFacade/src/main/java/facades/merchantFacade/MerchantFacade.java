@@ -1,7 +1,6 @@
 package facades.merchantFacade;
 
-import facades.DTO.Payment;
-import facades.DTO.RegistrationDTO;
+import facades.DTO.*;
 import facades.enums.UserType;
 import facades.exceptions.RegistrationException;
 import messaging.Event;
@@ -14,6 +13,8 @@ public class MerchantFacade {
     private CompletableFuture<String> future;
     private CompletableFuture<Payment> paymentFuture;
     private CompletableFuture<String> tokeConsumerFuture;
+    private CompletableFuture<Account> getSpecificUserFuture;
+    private CompletableFuture<Report> reportFuture;
     private Payment p;
 
     public MerchantFacade(MessageQueue q) {
@@ -71,5 +72,19 @@ public class MerchantFacade {
     private void handleUserIdFetched(Event event) {
         var id = event.getArgument(0,String.class);
         tokeConsumerFuture.complete(id);
+    }
+
+    public Account getSpecificUser(String userID) {
+        getSpecificUserFuture = new CompletableFuture<>();
+        Event tempE = new Event("GetSpecificUserById",  new Object[] { userID });
+        queue.publish(tempE);
+        return getSpecificUserFuture.join();
+    }
+
+    public Report createReport(ReportRequest reportRequest){
+        reportFuture = new CompletableFuture<>();
+        Event tempE = new Event("ReportCreationRequest",  new Object[] { reportRequest });
+        queue.publish(tempE);
+        return reportFuture.join();
     }
 }

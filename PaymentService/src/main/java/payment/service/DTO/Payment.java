@@ -7,8 +7,10 @@ public class Payment implements Serializable {
     private static final long serialVersionUID = 9023222981284806610L;
     public String debitor;
     public String creditor;
+    public String merchantId;
     public BigDecimal amount;
     public String description;
+    public String token;
     public String errorMessage;
 
     public Payment(String debitor, String creditor, BigDecimal amount, String description, String errorMessage) {
@@ -53,5 +55,21 @@ public class Payment implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(String merchantId) {
+        this.merchantId = merchantId;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

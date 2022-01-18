@@ -2,13 +2,12 @@ package facades.customerFacade;
 
 import facades.DTO.RegistrationDTO;
 import facades.DTO.TokenList;
-import facades.exceptions.InvalidRegistrationInputException;
+import facades.enums.UserType;
+import facades.exceptions.RegistrationException;
 import facades.exceptions.ToManyTokensLeftException;
-import facades.exceptions.InvalidRegistrationInputException;
 import messaging.Event;
 import messaging.MessageQueue;
 
-import javax.ws.rs.NotFoundException;
 import java.util.concurrent.CompletableFuture;
 
 public class CustomerFacade {
@@ -24,11 +23,13 @@ public class CustomerFacade {
         queue.addHandler("TokenUserNotFound", this::failedTokensRequest);
         queue.addHandler("CustomerBankIdNotFound", this::unsuccessfulCustomerRegistration);
         queue.addHandler("CustomerInvalidInput", this::unsuccessfulCustomerRegistration);
+        queue.addHandler("CustomerUnsuccessfulRegistration", this::unsuccessfulCustomerRegistration);
+
     }
 
     public String registerCustomer(RegistrationDTO regInfo) {
         future = new CompletableFuture<>();
-        Event tempE = new Event("CustomerRegister", new Object[]{regInfo});
+        Event tempE = new Event("UserRegister", new Object[]{regInfo, UserType.CUSTOMER});
         queue.publish(tempE);
         return future.join();
     }
@@ -58,6 +59,6 @@ public class CustomerFacade {
         future.complete(id);
     }
     private void unsuccessfulCustomerRegistration(Event e) {
-        future.completeExceptionally(new InvalidRegistrationInputException(e.getType()));
+        future.completeExceptionally(new RegistrationException(e.getArgument(0, String.class)));
     }
 }

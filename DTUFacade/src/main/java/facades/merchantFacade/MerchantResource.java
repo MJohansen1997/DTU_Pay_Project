@@ -2,9 +2,6 @@ package facades.merchantFacade;
 
 import facades.DTO.Payment;
 import facades.DTO.RegistrationDTO;
-import facades.customerFacade.CustomerFacade;
-import facades.customerFacade.CustomerFacadeFactory;
-import facades.exceptions.InvalidRegistrationInputException;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -25,7 +22,7 @@ public class MerchantResource {
         } catch (Exception e) {
             return Response.status(404).entity(e.getMessage()).build();
         }
-        return Response.status(200).entity("User registered with id: " + id).build();
+        return Response.status(200).entity(id).build();
     }
 
     @Path("payment")

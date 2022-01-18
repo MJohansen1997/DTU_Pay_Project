@@ -11,7 +11,7 @@ import javax.ws.rs.core.Response;
 public class CustomerResource{
 
     @POST
-    @Path("account")
+    @Path("register")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response registerCustomer(RegistrationDTO RegInfo) {

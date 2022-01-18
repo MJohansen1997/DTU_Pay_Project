@@ -2,11 +2,11 @@ package facades.merchantFacade;
 
 import facades.DTO.Payment;
 import facades.DTO.RegistrationDTO;
-import facades.exceptions.InvalidRegistrationInputException;
+import facades.enums.UserType;
+import facades.exceptions.RegistrationException;
 import messaging.Event;
 import messaging.MessageQueue;
 
-import java.security.InvalidAlgorithmParameterException;
 import java.util.concurrent.CompletableFuture;
 
 public class MerchantFacade {
@@ -14,7 +14,6 @@ public class MerchantFacade {
     private CompletableFuture<String> future;
     private CompletableFuture<Payment> paymentFuture;
     private CompletableFuture<String> tokeConsumerFuture;
-    RegisterMerchant rm;
     private Payment p;
 
     public MerchantFacade(MessageQueue q) {
@@ -23,15 +22,16 @@ public class MerchantFacade {
         queue.addHandler("MerchantRegisteredSuccessfully", this::successfulMerchantRegistration);
         queue.addHandler("MerchantPaymentSuccessfully", this::successfulMerchantPayment);
         queue.addHandler("MerchantPaymentFailed", this::handleMerchantPaymentFailed);
-        queue.addHandler("MerchantBankIdNotFound", this::unsuccessfulMerchantRegistration);
-        queue.addHandler("MerchantInvalidInput", this::unsuccessfulMerchantRegistration);
+//        queue.addHandler("MerchantBankIdNotFound", this::unsuccessfulMerchantRegistration);
+//        queue.addHandler("MerchantInvalidInput", this::unsuccessfulMerchantRegistration);
+        queue.addHandler("MerchantUnsuccessfulRegistration", this::unsuccessfulMerchantRegistration);
         queue.addHandler("UserID fecthed", this::handleUserIdFetched);
     }
 
 
-    public String registerMerchant(RegistrationDTO regInfo) throws InvalidRegistrationInputException {
+    public String registerMerchant(RegistrationDTO regInfo) {
         future = new CompletableFuture<>();
-        Event tempE = new Event("MerchantRegister",  new Object[] { regInfo });
+        Event tempE = new Event("UserRegister",  new Object[] { regInfo, UserType.MERCHANT});
         queue.publish(tempE);
         return future.join();
     }
@@ -41,7 +41,7 @@ public class MerchantFacade {
     }
 
     private void unsuccessfulMerchantRegistration(Event e) {
-        future.completeExceptionally(new InvalidRegistrationInputException(e.getType()));
+        future.completeExceptionally(new RegistrationException(e.getArgument(0,String.class)));
     }
 
     public Payment paymentMerchant(Payment payment) {

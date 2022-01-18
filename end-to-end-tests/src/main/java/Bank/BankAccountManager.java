@@ -27,4 +27,8 @@ public class BankAccountManager {
     public static void transferMoney(String cID, String mID, BigDecimal amount, String description) throws BankServiceException_Exception {
         bank.transferMoneyFromTo(cID, mID, amount, description);
     }
+
+    public static boolean getAccount(String bankID) throws BankServiceException_Exception {
+        return bank.getAccount(bankID) != null;
+    }
 }

@@ -38,7 +38,7 @@ public class CustomerAPI {
             return "Tokens not received";
         }
     }
-
+    //test commit
     public void createAccount(String firstName, String lastName, String CPR, BigDecimal balance) throws BankServiceException_Exception {
 //        bank.retireAccount("a7110fec-943c-4343-8145-4cf737f182dd");
 //        for(AccountInfo accountInfo : bank.getAccounts()) {

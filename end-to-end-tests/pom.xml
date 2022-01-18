@@ -93,11 +93,13 @@
             <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
+        <!--
         <dependency>
             <groupId>timm.dtu.dk</groupId>
             <artifactId>Bankservice</artifactId>
             <version>1.0</version>
         </dependency>
+        -->
     </dependencies>
     <build>
         <plugins>

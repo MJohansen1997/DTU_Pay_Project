@@ -1,6 +1,6 @@
 version: '3'
 services:
-  dtu-facade:
-    image: dtu-facade
+  dtu-facade-17:
+    image: dtu-facade-17
     build: .
  

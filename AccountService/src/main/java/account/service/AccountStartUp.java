@@ -3,9 +3,9 @@ import account.service.adapter.FacadeAdapter;
 import account.service.repository.AccountRepositoryAdapter;
 import messaging.implementations.RabbitMqQueue;
 
-public class StartUp {
+public class AccountStartUp {
     public static void main(String[] args) throws Exception {
-            new StartUp().startUp();
+            new AccountStartUp().startUp();
         }
 
         private void startUp() throws Exception {

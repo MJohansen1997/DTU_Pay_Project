@@ -1,5 +1,6 @@
 package TokenTests;
 
+import Bank.BankAccountManager;
 import CustomerAPI.CustomerAPI;
 import DTO.RegistrationDTO;
 import DTO.UserDTO;
@@ -10,6 +11,8 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
 
 import java.math.BigDecimal;
 
@@ -20,15 +23,27 @@ public class TokenSteps {
     String mid;
     CustomerAPI cAPI = new CustomerAPI();
     MerchantAPI mAPI = new MerchantAPI();
+    String bankId;
     String token;
     int oldCount;
     int newCount;
     String message;
 
 
+//    @Before("token")
+    @Given("a customer with a bank account with balance {double}")
+    public void aCustomerWithABankAccountWithBalance(double balance) {
+        try {
+            bankId  = BankAccountManager.createAccount("Token", "Tokenson", "1234991234", BigDecimal.valueOf(balance));
+        }
+        catch (Exception ignored){
+            System.out.println(ignored.getMessage());
+        }
+    }
+
     @Given("the customer is registered with DTU pay")
     public void that_the_customer_is_registered_with_dtu_pay() {
-        cAPI.setDTUPayID(cAPI.registerCustomer(new UserDTO("Token", "Tokenson", "123499-1234", cAPI.getBankID())));
+        cAPI.setDTUPayID(cAPI.registerCustomer(new UserDTO("Token", "Tokenson", "1234991234", bankId)));
     }
 
     @Given("the customer has {int} token left")
@@ -51,19 +66,9 @@ public class TokenSteps {
         assertEquals(message, string);
     }
 
-    @Given("a customer with a bank account with balance {double}")
-    public void aCustomerWithABankAccountWithBalance(double balance) {
-        try {
-            cAPI.createAccount("Token", "Tokenson", "123499-1234", BigDecimal.valueOf(balance));
-        }
-        catch (Exception ignored){
-            System.out.println(ignored.getMessage());
-        }
-    }
-
 
     @After("@token")
     public void cleanUpAccounts() throws BankServiceException_Exception {
-        cAPI.retireAccount();
+        BankAccountManager.retireAccount(bankId);
     }
 }

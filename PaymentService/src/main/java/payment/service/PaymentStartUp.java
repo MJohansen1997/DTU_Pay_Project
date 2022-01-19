@@ -10,8 +10,8 @@ public class PaymentStartUp {
 
     private void startUp() throws Exception {
         System.out.println("startup");
-        var mq = new RabbitMqQueue("rabbitmq");
-//        var mq = new RabbitMqQueue("localhost");
+//        var mq = new RabbitMqQueue("rabbitmq");
+        var mq = new RabbitMqQueue("localhost");
         new PaymentController(mq);
     }
 }

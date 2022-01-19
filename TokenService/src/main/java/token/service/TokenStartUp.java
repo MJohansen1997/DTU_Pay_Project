@@ -11,8 +11,8 @@ public class TokenStartUp {
 
     private void startUp() throws Exception {
         System.out.println("startup");
-//        var mq = new RabbitMqQueue("localhost");
-        var mq = new RabbitMqQueue("rabbitmq");
+        var mq = new RabbitMqQueue("localhost");
+//        var mq = new RabbitMqQueue("rabbitmq");
         var service = new TokenService(new TokenRepository());
         new TokenAdapter(mq, service);
     }

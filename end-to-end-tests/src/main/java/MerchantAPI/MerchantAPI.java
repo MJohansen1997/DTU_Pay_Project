@@ -21,7 +21,7 @@ public class MerchantAPI {
     String bankID;
     HashMap<String, UserDTO> merchantList = new HashMap<>();
     BankService bank = new BankServiceService().getBankServicePort();
-    
+
 
     public String registerMerchant(UserDTO user){
         WebTarget target = client.target("http://localhost:8080/merchant/register");

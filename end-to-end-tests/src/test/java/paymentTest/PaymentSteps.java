@@ -12,12 +12,10 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.java.After;
-import io.cucumber.java.Before;
 
 import javax.ws.rs.NotFoundException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -29,7 +27,9 @@ public class PaymentSteps {
    UserDTO cust;
    UserDTO merc;
    String token;
+   String merchantID;
    public BankServiceException_Exception exception = null;
+
 
     //********************************//
     //********** Scenario 1 **********//
@@ -37,7 +37,7 @@ public class PaymentSteps {
     @Given("customer with a bank account with balance {double}")
     public void CustomerWithABankAccountWithBalance(double balance) {
         try {
-            custBankID = BankAccountManager.createAccount("CustomerPay11", "CustomerPayment11", "123499-2111", BigDecimal.valueOf(balance));
+            custBankID = BankAccountManager.createAccount("CustomerPay11", "CustomerPayment11", "123499-3111", BigDecimal.valueOf(balance));
         }
         catch (BankServiceException_Exception e){
             fail(e.getMessage());
@@ -46,7 +46,7 @@ public class PaymentSteps {
 
     @And("that the customer is registered with DTU Pay")
     public void thatTheCustomerIsRegisteredWithDTUPay() {
-        cust = new UserDTO("CustomerPay11", "CustomerPayment11", "123499-2111", custBankID);
+        cust = new UserDTO("CustomerPay11", "CustomerPayment11", "123499-3111", custBankID);
         customerAPI.registerCustomer(cust);
     }
 
@@ -59,7 +59,7 @@ public class PaymentSteps {
     @Given("a merchant with a bank account with balance {double}")
     public void aMerchantWithABankAccountWithBalance(double balance) {
         try {
-            mercBankID = BankAccountManager.createAccount("MerchantPay11", "MerchantPayment11", "123499-3227", BigDecimal.valueOf(balance));
+            mercBankID = BankAccountManager.createAccount("MerchantPay11", "MerchantPayment11", "123499-4227", BigDecimal.valueOf(balance));
         } catch (BankServiceException_Exception bankServiceException_exception){
             //If it catches an exception then this step fails
             fail(bankServiceException_exception.getMessage());
@@ -68,14 +68,14 @@ public class PaymentSteps {
 
     @And("that the merchant is registered with DTU Pay")
     public void thatTheMerchantIsRegisteredWithDTUPay() {
-        merc = new UserDTO("MerchantPay11","MerchantPayment11","123499-3227",mercBankID);
-        merchantAPI.registerMerchant(merc);
+        merc = new UserDTO("MerchantPay11","MerchantPayment11","123499-4227",mercBankID);
+        merchantID = merchantAPI.registerMerchant(merc);
     }
 
     @When("the merchant initiates a payment for {double} kr by the customer")
     public void theMerchantInitiatesAPaymentForKrByTheCustomer(double amount) {
         try {
-            Payment p = merchantAPI.payment(new Payment(custBankID,mercBankID,"merchantId",new BigDecimal(amount),"Cannot be Empty",token));
+            Payment p = merchantAPI.payment(new Payment(custBankID,mercBankID, merchantID,new BigDecimal(amount),"Cannot be Empty",token));
             assertTrue(p instanceof Payment && p != null);
         } catch (Exception e) {
             fail();
@@ -99,6 +99,9 @@ public class PaymentSteps {
         assertEquals(balance, accountBalance.doubleValue(), 0);
     }
 
+
+
+
     //********************************//
     //********** Scenario 2 **********//
     //********************************//
@@ -114,32 +117,25 @@ public class PaymentSteps {
             fail(e.getMessage());
         }
     }
-    @Given("the customer has {int} tokens")
-    public void the_customer_has_tokens(int n) {
+    @Given("the token is invalid")
+    public void the_token_is_invalid() {
         try {
             customerAPI.requestTokens(customerAPI.getDTUPayID());
             ArrayList<String> tokens = customerAPI.getTokens();
             mercBankID = BankAccountManager.createAccount("MerchantPay10", "MerchantPayment10", "123499-3222", BigDecimal.valueOf(199));
             merc = new UserDTO("MerchantPay10","MerchantPayment10","123499-3222",mercBankID);
-            merchantAPI.registerMerchant(merc);
-            for(String token : tokens){
-                //Payment p = merchantAPI.payment(new Payment(custBankID,mercBankID,"merchantId",new BigDecimal("1"),"Cannot be Empty",token));
-            }
-            //We don't have getTokens method yet :-(
-            int tokensLeft = 0;
-            assertEquals(n,tokensLeft);
+            merchantID = merchantAPI.registerMerchant(merc);
         } catch (BankServiceException_Exception e) {
             fail(e.getMessage());
         }
-
+        token = "fakeToken";
+        assertTrue(true);
     }
 
     @When("the merchant initiates a payment for {int} kr by the customer1")
     public void the_merchant_initiates_a_payment_for_kr_by_the_customer(int amount) {
-        token = customerAPI.getTokens().get(0);
-        token = "fakeToken";
         try {
-            Payment p = merchantAPI.payment(new Payment(custBankID,mercBankID,"merchantId",new BigDecimal("1"),"Cannot be Empty",token));
+            Payment p = merchantAPI.payment(new Payment(custBankID,mercBankID,merchantID,new BigDecimal("1"),"Cannot be Empty",token));
         }catch(NotFoundException notFoundException){
             assertTrue(true);
         }
@@ -149,6 +145,15 @@ public class PaymentSteps {
     public void the_payment_is_denied() {
         // don't needed.
         assertTrue(true);
+    }
+    @When("the merchant initiates a payment with the same token")
+    public void the_merchant_initiates_a_payment_with_the_same_token() {
+        try {
+            Payment p = merchantAPI.payment(new Payment(custBankID,mercBankID,merchantID,new BigDecimal("1"),"Cannot be Empty",token));
+        }catch (NotFoundException e){
+            assertTrue(true);
+        }
+
     }
 
 

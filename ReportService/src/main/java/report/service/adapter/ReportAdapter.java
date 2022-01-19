@@ -17,7 +17,9 @@ public class ReportAdapter {
         queue.addHandler("CustomerRegisteredSuccessfully", this::handleCreateUserInReportRegister);
         queue.addHandler("ReportCreationRequest", this::handleCreateReport);
         queue.addHandler("ReportManager", this::handleReportManager);
-        queue.addHandler("ReportsRequest", this::handleReportRequest);
+        queue.addHandler("CustomerReportsRequest", this::handleCustomerReportRequest);
+        queue.addHandler("MerchantReportsRequest", this::handleMerchantReportRequest);
+//        queue.addHandler("CustomerReportsRequest", this::handleMerchantReportRequest);
         queue.addHandler("MerchantRegisteredSuccessfully", this::handleCreateUserInReportRegister);
         this.service = service;
     }
@@ -45,15 +47,26 @@ public class ReportAdapter {
         returnEvent = new Event("ManagerReportRequest", new Object[] {service.getManagerReports()});
         queue.publish(returnEvent);
     }
-    public void handleReportRequest(Event event){
-
+    public void handleCustomerReportRequest(Event event){
         var userID = event.getArgument(0, String.class);
         Event returnEvent;
         try {
-            returnEvent = new Event("ReportsSent", new Object[] {service.getReportsByID(userID)});
+            returnEvent = new Event("CustomerReportsSent", new Object[] {service.getReportsByID(userID)});
             queue.publish(returnEvent);
         } catch (IncorrectInformationException e) {
-            returnEvent = new Event("ReportsNotSent", new Object[] {e.getMessage()});
+            returnEvent = new Event("CustomerReportsNotSent", new Object[] {e.getMessage()});
+            queue.publish(returnEvent);
+        }
+    }
+
+    public void handleMerchantReportRequest(Event event){
+        var userID = event.getArgument(0, String.class);
+        Event returnEvent;
+        try {
+            returnEvent = new Event("MerchantReportsSent", new Object[] {service.getReportsByID(userID)});
+            queue.publish(returnEvent);
+        } catch (IncorrectInformationException e) {
+            returnEvent = new Event("MerchantReportsNotSent", new Object[] {e.getMessage()});
             queue.publish(returnEvent);
         }
     }

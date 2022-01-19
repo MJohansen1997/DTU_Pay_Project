@@ -5,7 +5,7 @@ import facades.enums.UserType;
 import facades.exceptions.RegistrationException;
 import messaging.Event;
 import messaging.MessageQueue;
-import report.service.DTO.Report;
+
 
 import java.util.concurrent.CompletableFuture;
 
@@ -16,12 +16,11 @@ public class MerchantFacade {
     private CompletableFuture<String> tokeConsumerFuture;
     private CompletableFuture<Account> getSpecificUserFuture;
     private CompletableFuture<Report> reportFuture;
-    private CompletableFuture<ReportList> reportRequested;
+    private CompletableFuture<MerchantReportList> reportRequested;
     private Payment p;
 
     public MerchantFacade(MessageQueue q) {
         queue = q;
-//        rm = new RegisterMerchant();
         queue.addHandler("MerchantRegisteredSuccessfully", this::successfulMerchantRegistration);
         queue.addHandler("MerchantPaymentSuccessfully", this::successfulMerchantPayment);
         queue.addHandler("MerchantPaymentFailed", this::handleMerchantPaymentFailed);
@@ -32,8 +31,8 @@ public class MerchantFacade {
         queue.addHandler("TokenNotFound", this::handleTokenNotFound);
         queue.addHandler("FoundSpecificUser", this::handleFoundSpecificUser);
         queue.addHandler("FoundSpecificUser", this::handleFoundSpecificUser);
-//        queue.addHandler("ReportCreationRequestSucceeded",this::handleReportCreated);
-//        queue.addHandler("ReportCreationRequestFailed",this::handleReportCreated);
+        queue.addHandler("MerchantReportsSent", this::reportListReceived);
+        queue.addHandler("MerchantReportsNotSent", this::reportListFailed);
     }
 
     public String registerMerchant(RegistrationDTO regInfo) {
@@ -80,13 +79,6 @@ public class MerchantFacade {
         tokeConsumerFuture.complete(id);
     }
 
-    public ReportList reportListRecived(String paymentID) {
-        reportRequested = new CompletableFuture<>();
-        Event event = new Event("ReportMerchant", new Object[] { paymentID });
-        queue.publish(event);
-        return reportRequested.join();
-    }
-
     private void handleTokenNotFound(Event event) {
         var id = event.getArgument(0,String.class);
         tokeConsumerFuture.complete(id);
@@ -105,18 +97,24 @@ public class MerchantFacade {
     }
 
     public void createReport(ReportRequest reportRequest){
-//        reportFuture = new CompletableFuture<>();
         Event tempE = new Event("ReportCreationRequest",  new Object[] { reportRequest });
         queue.publish(tempE);
-//        reportFuture.orTimeout(10, TimeUnit.SECONDS);
-//        reportFuture.cancel(true);
-//        return reportFuture.join();
     }
 
-//    private void handleReportCreated(Event e) {
-//        var id = e.getArgument(0, Report.class);
-//        reportFuture.complete(id);
-//    }
+    public MerchantReportList reportListRequest(String userID) {
+        reportRequested = new CompletableFuture<>();
+        Event event = new Event("MerchantReportsRequest", new Object[] { userID });
+        queue.publish(event);
+        return reportRequested.join();
+    }
 
+    public void reportListReceived(Event event) {
+        var list = event.getArgument(0, MerchantReportList.class);
+        reportRequested.complete(list);
+    }
+
+    public void reportListFailed(Event event) {
+        reportRequested.complete(null);
+    }
 
 }

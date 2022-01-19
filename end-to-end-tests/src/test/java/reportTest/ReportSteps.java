@@ -2,8 +2,10 @@ package reportTest;
 
 import Bank.BankAccountManager;
 import CustomerAPI.CustomerAPI;
-import DTO.ManagerReportDTO;
 import DTO.Payment;
+import DTO.Report.CustomerReport;
+import DTO.Report.MerchantReport;
+import DTO.Report.Report;
 import DTO.Report.ReportList;
 import DTO.UserDTO;
 import ManagerAPI.ManagerAPI;
@@ -15,7 +17,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import report.service.DTO.Report;
+
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -23,9 +25,9 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ReportSteps {
-    ArrayList<Report> merArray, cusArray;
+    ArrayList<MerchantReport> merArray;
+    ArrayList<CustomerReport>cusArray;
     String token;
-    ManagerReportDTO dto;
     ManagerAPI mAPI = new ManagerAPI();
     MerchantAPI merAPI = new MerchantAPI();
     CustomerAPI cusAPI = new CustomerAPI();
@@ -72,7 +74,12 @@ public class ReportSteps {
     @Then("the reportlist should contain two reports with the same tokenID")
     public void theReportlistShouldContainTwoReportsWithTheSamePaymentIDWhichIs() {
         ArrayList<Report> manArray = rList.getReportList();
-        assertEquals(manArray.get(0).getTokenID(), manArray.get(1).getTokenID());
+        int increment = 0;
+        for (Report report : manArray) {
+            if (report.getTokenID().equals(cusAPI.getTokens().get(0)))
+                increment++;
+        }
+        assertEquals(2, increment);
     }
 
     // END OF TEST 1 //

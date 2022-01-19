@@ -67,7 +67,7 @@ public class MerchantResource {
     @Produces("application/json")
     public Response getReports(@PathParam("merchantID")String userID) {
         MerchantFacade MF = new MerchantFacadeFactory().getFacade();
-        ReportList reportList = MF.reportListRecived(userID);
+        MerchantReportList reportList = MF.reportListRequest(userID);
 
         return Response.status(200).entity(reportList).build();
     }

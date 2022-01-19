@@ -1,9 +1,7 @@
 package MerchantAPI;
 
+import DTO.*;
 import DTO.Report.ReportList;
-import DTO.Payment;
-import DTO.TokenList;
-import DTO.UserDTO;
 import dtu.ws.fastmoney.*;
 
 import javax.ws.rs.NotFoundException;
@@ -54,15 +52,15 @@ public class MerchantAPI {
         return merchantList;
     }
 
-    ReportList reports = new ReportList();
+    MerchantReportList reports = new MerchantReportList();
 
     //Doesnt take any id yet
-    public ReportList requestMerchantReports(String merchantID) {
+    public MerchantReportList requestMerchantReports(String merchantID) {
         WebTarget target = client.target("http://localhost:8080/merchant/reports/" + merchantID);
         try {
             reports = target.request()
                     .accept(MediaType.APPLICATION_JSON)
-                    .get(ReportList.class);
+                    .get(MerchantReportList.class);
             return reports;
         } catch (NotFoundException exception) {
             //How does we handle exceptions here? HTTP or Custom exceptions?

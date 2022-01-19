@@ -1,7 +1,5 @@
 package DTO.Report;
 
-import report.service.DTO.Report;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 

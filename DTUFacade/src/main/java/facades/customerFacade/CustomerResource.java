@@ -1,11 +1,14 @@
 package facades.customerFacade;
 
+import facades.DTO.CustomerReport;
+import facades.DTO.CustomerReportList;
 import facades.DTO.RegistrationDTO;
 import facades.DTO.ReportList;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 
 @Path("/customer")
 public class CustomerResource{
@@ -47,7 +50,7 @@ public class CustomerResource{
     @Produces("application/json")
     public Response getReports(@PathParam("customerID") String userID) {
         CustomerFacade CF = new CustomerFacadeFactory().getFacade();
-        ReportList reportList = CF.reportListRecived(userID);
+        CustomerReportList reportList = CF.reportListRequest(userID);
 
         return Response.status(200).entity(reportList).build();
     }

@@ -1,9 +1,9 @@
-package report.service.DTO;
+package facades.DTO;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public abstract class Report implements Serializable {
+public class Report implements Serializable {
 
     private static final long serialVersionUID = 9023222981284806610L;
 

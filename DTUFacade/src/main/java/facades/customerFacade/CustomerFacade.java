@@ -1,21 +1,20 @@
 package facades.customerFacade;
 
-import facades.DTO.RegistrationDTO;
-import facades.DTO.ReportList;
-import facades.DTO.TokenList;
+import facades.DTO.*;
 import facades.enums.UserType;
 import facades.exceptions.RegistrationException;
 import facades.exceptions.ToManyTokensLeftException;
 import messaging.Event;
 import messaging.MessageQueue;
 
+import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 
 public class CustomerFacade {
     private MessageQueue queue;
     private CompletableFuture<String> future;
     private CompletableFuture<TokenList> tokensRequested;
-    private CompletableFuture<ReportList> reportRequested;
+    private CompletableFuture<CustomerReportList> reportRequested;
 
     public CustomerFacade(MessageQueue q) {
         queue = q;
@@ -26,6 +25,8 @@ public class CustomerFacade {
         queue.addHandler("CustomerBankIdNotFound", this::unsuccessfulCustomerRegistration);
         queue.addHandler("CustomerInvalidInput", this::unsuccessfulCustomerRegistration);
         queue.addHandler("CustomerUnsuccessfulRegistration", this::unsuccessfulCustomerRegistration);
+        queue.addHandler("CustomerReportsSent", this::reportListReceived);
+        queue.addHandler("CustomerReportsNotSent", this::reportListFailed);
 
     }
 
@@ -64,10 +65,19 @@ public class CustomerFacade {
         future.completeExceptionally(new RegistrationException(e.getArgument(0, String.class)));
     }
 
-    public ReportList reportListRecived(String paymentID) {
+    public CustomerReportList reportListRequest(String userID) {
         reportRequested = new CompletableFuture<>();
-        Event event = new Event("ReportCustomer", new Object[] { paymentID });
+        Event event = new Event("CustomerReportsRequest", new Object[] { userID });
         queue.publish(event);
         return reportRequested.join();
+    }
+
+    public void reportListReceived(Event event) {
+        var list = event.getArgument(0, CustomerReportList.class);
+        reportRequested.complete(list);
+    }
+
+    public void reportListFailed(Event event) {
+        reportRequested.complete(null);
     }
 }

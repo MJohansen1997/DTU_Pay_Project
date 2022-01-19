@@ -25,7 +25,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="DTUFacade" options="-parameters" />
+      <module name="DTUFacade" options="" />
     </option>
   </component>
 </project>

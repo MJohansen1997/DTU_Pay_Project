@@ -1,7 +1,8 @@
 package ManagerAPI;
 
+import DTO.Report.Report;
 import DTO.Report.ReportList;
-import report.service.DTO.Report;
+
 
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.client.Client;

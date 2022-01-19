@@ -1,5 +1,6 @@
 package CustomerAPI;
 
+import DTO.CustomerReportList;
 import DTO.RegistrationDTO;
 import DTO.Report.ReportList;
 import DTO.TokenList;
@@ -75,14 +76,14 @@ public class CustomerAPI {
         }
     }
 
-    ReportList reports = new ReportList();
+    CustomerReportList reports = new CustomerReportList();
 
-    public ReportList requestCustomerReports(String customerID) {
-        WebTarget target = client.target("http://localhost:8080/merchant/reports/" + customerID);
+    public CustomerReportList requestCustomerReports(String customerID) {
+        WebTarget target = client.target("http://localhost:8080/customer/reports/" + customerID);
         try {
             reports = target.request()
                     .accept(MediaType.APPLICATION_JSON)
-                    .get(ReportList.class);
+                    .get(CustomerReportList.class);
             return reports;
         } catch (NotFoundException exception) {
             //How does we handle exceptions here? HTTP or Custom exceptions?

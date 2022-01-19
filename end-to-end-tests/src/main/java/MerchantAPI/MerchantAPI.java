@@ -18,13 +18,10 @@ import java.util.HashMap;
 
 public class MerchantAPI {
     Client client = ClientBuilder.newClient();
-    public String VerifyToken(String token) {
-        return "";
-    }
     String bankID;
     HashMap<String, UserDTO> merchantList = new HashMap<>();
     BankService bank = new BankServiceService().getBankServicePort();
-
+    
 
     public String registerMerchant(UserDTO user){
         WebTarget target = client.target("http://localhost:8080/merchant/register");

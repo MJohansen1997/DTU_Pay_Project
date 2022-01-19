@@ -1,6 +1,5 @@
 package facades.managerFacade;
 
-import dtu.ws.fastmoney.AccountInfo;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

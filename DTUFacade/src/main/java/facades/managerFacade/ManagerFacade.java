@@ -1,6 +1,5 @@
 package facades.managerFacade;
 
-import dtu.ws.fastmoney.AccountInfo;
 import messaging.Event;
 import messaging.MessageQueue;
 

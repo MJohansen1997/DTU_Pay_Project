@@ -1,13 +1,14 @@
 package facades.merchantFacade;
 
-import facades.DTO.Payment;
-import facades.DTO.RegistrationDTO;
+import facades.DTO.*;
 import facades.enums.UserType;
 import facades.exceptions.RegistrationException;
+import facades.managerFacade.ReportList;
 import messaging.Event;
 import messaging.MessageQueue;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 public class MerchantFacade {
     private MessageQueue queue;

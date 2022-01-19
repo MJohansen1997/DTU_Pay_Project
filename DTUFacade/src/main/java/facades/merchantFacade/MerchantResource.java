@@ -1,5 +1,6 @@
 package facades.merchantFacade;
 
+import facades.DTO.Account;
 import facades.DTO.Payment;
 import facades.DTO.RegistrationDTO;
 import facades.DTO.ReportRequest;
@@ -62,7 +63,7 @@ public class MerchantResource {
             BigDecimal amount = p.getAmount();
 
             //This method creates the report
-            //CF.createReport(new ReportRequest("",customerID,merchantID,tokenId,customerBankID,merchantBankID,amount ));
+            CF.createReport(new ReportRequest("",customerID,merchantID,tokenId,customerBankID,merchantBankID,amount ));
 
             return Response.status(200).entity(payment).build();
         }

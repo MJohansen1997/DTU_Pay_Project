@@ -18,6 +18,7 @@ public class ReportAdapter {
         queue.addHandler("ReportCreationRequest", this::handleCreateReport);
         queue.addHandler("ReportManager", this::handleReportManager);
         queue.addHandler("ReportsRequest", this::handleReportRequest);
+        queue.addHandler("MerchantRegisteredSuccessfully", this::handleCreateUserInReportRegister);
         this.service = service;
     }
 

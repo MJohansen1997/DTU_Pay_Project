@@ -18,17 +18,17 @@ Feature: Payment
     When the merchant initiates a payment for 100 kr by the customer1
     Then the payment is denied
 
-@payment
-  Scenario: Fail Payment due to wrong ID
-    Given a customer with the ID "c123"
-    And the customer has 3 tokens
-    And that the customer is registered with DTU Pay
-    And a merchant with the ID "m321"
-    When the merchant initiates a payment for "100" kr by the customer
-    Given the merchant types a "321" customerID
-    Then the payment is "denied"
-    And the balance of the customer at the bank is "1000.00" kr
-    And the balance of the merchant at the bank is "2000.00" kr
+#@payment
+#  Scenario: Fail Payment due to wrong ID
+#    Given a customer with the ID "c123"
+#    And the customer has 3 tokens
+#    And that the customer is registered with DTU Pay
+#    And a merchant with the ID "m321"
+#    When the merchant initiates a payment for "100" kr by the customer
+#    Given the merchant types a "321" customerID
+#    Then the payment is "denied"
+#    And the balance of the customer at the bank is "1000.00" kr
+#    And the balance of the merchant at the bank is "2000.00" kr
 
 
   

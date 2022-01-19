@@ -155,7 +155,7 @@ public class PaymentSteps {
     //********************************//
     //********** Scenario 3 **********//
     //********************************//
-    @Given("a customer with the ID {string}")
+    /*@Given("a customer with the ID {string}")
     public void a_customer_with_the_id(String string) {
         // Write code here that turns the phrase above into concrete actions
         throw new io.cucumber.java.PendingException();
@@ -189,7 +189,7 @@ public class PaymentSteps {
     public void the_balance_of_the_merchant_at_the_bank_is_kr(String string) {
         // Write code here that turns the phrase above into concrete actions
         throw new io.cucumber.java.PendingException();
-    }
+    }*/
 
     @After("@payment")
     public void cleanup() {

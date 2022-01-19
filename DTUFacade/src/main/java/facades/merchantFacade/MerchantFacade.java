@@ -3,12 +3,11 @@ package facades.merchantFacade;
 import facades.DTO.*;
 import facades.enums.UserType;
 import facades.exceptions.RegistrationException;
-import facades.managerFacade.ReportList;
 import messaging.Event;
 import messaging.MessageQueue;
+import report.service.DTO.Report;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
 
 public class MerchantFacade {
     private MessageQueue queue;

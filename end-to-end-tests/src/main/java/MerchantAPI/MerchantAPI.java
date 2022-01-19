@@ -57,8 +57,8 @@ public class MerchantAPI {
     ReportList reports = new ReportList();
 
     //Doesnt take any id yet
-    public ReportList requestMerchantReports() {
-        WebTarget target = client.target("http://localhost:8080/merchant/reports");
+    public ReportList requestMerchantReports(String merchantID) {
+        WebTarget target = client.target("http://localhost:8080/merchant/reports/" + merchantID);
         try {
             reports = target.request()
                     .accept(MediaType.APPLICATION_JSON)

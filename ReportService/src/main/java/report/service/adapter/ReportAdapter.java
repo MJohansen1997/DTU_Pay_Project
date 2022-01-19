@@ -42,7 +42,7 @@ public class ReportAdapter {
 
     public void handleReportManager(Event event){
         Event returnEvent;
-        returnEvent = new Event("AllReportsRequestedSucceeded", new Object[] {service.getManagerReports()});
+        returnEvent = new Event("ManagerReportRequest", new Object[] {service.getManagerReports()});
         queue.publish(returnEvent);
     }
     public void handleReportRequest(Event event){

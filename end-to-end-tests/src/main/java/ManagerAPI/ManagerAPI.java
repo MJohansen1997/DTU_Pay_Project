@@ -1,8 +1,7 @@
 package ManagerAPI;
 
-import DTO.Report.ReportCustomer;
 import DTO.Report.ReportList;
-import DTO.Report.ReportMerchant;
+import report.service.DTO.Report;
 
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.client.Client;
@@ -14,8 +13,8 @@ public class ManagerAPI {
     Client client = ClientBuilder.newClient();
 
     ReportList reportsManager = new ReportList();
-    ReportMerchant reportsMerchant = new ReportMerchant();
-    ReportCustomer reportsCustomer = new ReportCustomer();
+    Report reportsMerchant;
+    Report reportsCustomer;
 
 
     public ReportList requestManagerReports() {
@@ -30,37 +29,4 @@ public class ManagerAPI {
             throw new NotFoundException("Reports doesn't exist");
         }
     }
-
-    public ReportMerchant requestMerchantReports() {
-        WebTarget target = client.target("http://localhost:8080/merchant/reports");
-        try {
-            reportsMerchant = target.request()
-                    .accept(MediaType.APPLICATION_JSON)
-                    .get(ReportMerchant.class);
-            return reportsMerchant;
-        } catch (NotFoundException exception) {
-            //How does we handle exceptions here? HTTP or Custom exceptions?
-            throw new NotFoundException("Reports doesn't exist");
-        }
-    }
-
-    public ReportCustomer requestCustomerReports() {
-        WebTarget target = client.target("http://localhost:8080/customer/reports");
-        try {
-            reportsCustomer = target.request()
-                    .accept(MediaType.APPLICATION_JSON)
-                    .get(ReportCustomer.class);
-            return reportsCustomer;
-        } catch (NotFoundException exception) {
-            //How does we handle exceptions here? HTTP or Custom exceptions?
-            throw new NotFoundException("Reports doesn't exist");
-        }
-    }
-
-//    public void createRapport(String paymentID){
-//        Report report;
-//        report.setPaymentID(paymentID);
-//
-//
-//    }
 }

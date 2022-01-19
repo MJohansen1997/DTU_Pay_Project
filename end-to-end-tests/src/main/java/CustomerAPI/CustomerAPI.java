@@ -1,6 +1,7 @@
 package CustomerAPI;
 
 import DTO.RegistrationDTO;
+import DTO.Report.ReportList;
 import DTO.TokenList;
 import dtu.ws.fastmoney.*;
 
@@ -71,6 +72,21 @@ public class CustomerAPI {
 
         }catch (Exception exception) {
             return "404";
+        }
+    }
+
+    ReportList reports = new ReportList();
+
+    public ReportList requestCustomerReports(String customerID) {
+        WebTarget target = client.target("http://localhost:8080/merchant/reports/" + customerID);
+        try {
+            reports = target.request()
+                    .accept(MediaType.APPLICATION_JSON)
+                    .get(ReportList.class);
+            return reports;
+        } catch (NotFoundException exception) {
+            //How does we handle exceptions here? HTTP or Custom exceptions?
+            throw new NotFoundException("Reports doesn't exist");
         }
     }
 

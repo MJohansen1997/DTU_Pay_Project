@@ -1,8 +1,11 @@
-package facades.DTO;
+package report.service.DTO;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public abstract class Report {
+public abstract class Report implements Serializable {
+
+    private static final long serialVersionUID = 9023222981284806610L;
 
     String paymentID;
     String merchantID;
@@ -17,7 +20,9 @@ public abstract class Report {
         this.bankID = bankID;
         this.amount = amount;
     }
-    public Report(){}
+
+    public Report() {
+    }
 
     public String getPaymentID() {
         return paymentID;

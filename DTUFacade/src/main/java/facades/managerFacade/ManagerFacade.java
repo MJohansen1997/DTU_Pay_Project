@@ -1,5 +1,6 @@
 package facades.managerFacade;
 
+import facades.DTO.ReportList;
 import messaging.Event;
 import messaging.MessageQueue;
 
@@ -14,7 +15,7 @@ public class ManagerFacade {
 
     public ManagerFacade(MessageQueue q) {
         queue = q;
-        queue.addHandler("ReportsRequestedSucceeded", this::succesfulReportRequested);
+        queue.addHandler("ManagerReportRequest", this::succesfulReportRequested);
     }
 
 

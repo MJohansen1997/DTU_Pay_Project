@@ -1,10 +1,7 @@
 package facades.customerFacade;
 
 import facades.DTO.RegistrationDTO;
-import facades.DTO.TokenList;
-import facades.managerFacade.ReportList;
-import facades.merchantFacade.MerchantFacade;
-import facades.merchantFacade.MerchantFacadeFactory;
+import facades.DTO.ReportList;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -45,12 +42,12 @@ public class CustomerResource{
         }
     }
 
-    @Path("report")
+    @Path("reports/{customerID}")
     @GET
     @Produces("application/json")
-    public Response getReports(String paymentID) {
+    public Response getReports(@PathParam("customerID") String userID) {
         CustomerFacade CF = new CustomerFacadeFactory().getFacade();
-        ReportList reportList = CF.reportListRecived(paymentID);
+        ReportList reportList = CF.reportListRecived(userID);
 
         return Response.status(200).entity(reportList).build();
     }

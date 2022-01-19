@@ -1,6 +1,4 @@
-package DTO.Report;
-
-import report.service.DTO.Report;
+package facades.DTO;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -22,8 +20,8 @@ public class ReportList implements Serializable {
         this.reports = Reports;
     }
 
-    public Report containsPayment(String ID) {
-        for (Report report : reports) {
+    public report.service.DTO.Report containsPayment(String ID) {
+        for (report.service.DTO.Report report : reports) {
             if (report.getPaymentID().equals(ID))
                 return report;
         }

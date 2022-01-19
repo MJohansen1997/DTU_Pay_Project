@@ -8,6 +8,7 @@ import report.service.port.IReportService;
 import java.util.ArrayList;
 
 public class ReportService implements IReportService {
+    int paymentIDIncrementer = 0;
     private final IReportRepository repository;
 
     public ReportService(IReportRepository repository) {
@@ -22,14 +23,14 @@ public class ReportService implements IReportService {
         CustomerReport customerReport = new CustomerReport();
         MerchantReport merchantReport = new MerchantReport();
 
-        customerReport.setPaymentID(request.getPaymentID());
+        customerReport.setPaymentID(String.valueOf(paymentIDIncrementer));
         customerReport.setCustomerID(request.getCustomerID());
         customerReport.setMerchantID(request.getMerchantID());
         customerReport.setTokenID(request.getTokenID());
         customerReport.setBankID(request.getCustomerBankID());
         customerReport.setAmount(request.getAmount());
 
-        merchantReport.setPaymentID(request.getPaymentID());
+        merchantReport.setPaymentID(String.valueOf(paymentIDIncrementer++));
         merchantReport.setMerchantID(request.getMerchantID());
         merchantReport.setTokenID(request.getTokenID());
         merchantReport.setBankID(request.getMerchantBankID());
@@ -45,6 +46,7 @@ public class ReportService implements IReportService {
         } catch (IncorrectInformationException ignored) {
             throw new IncorrectInformationException("merchant doesn't exist");
         }
+
         return merchantReport;
     }
 

@@ -1,12 +1,6 @@
 package facades.merchantFacade;
 
-import facades.DTO.Account;
-import facades.DTO.Payment;
-import facades.DTO.RegistrationDTO;
-import facades.DTO.ReportRequest;
-import facades.managerFacade.ManagerFacade;
-import facades.managerFacade.ManagerFacadeFactory;
-import facades.managerFacade.ReportList;
+import facades.DTO.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -68,12 +62,12 @@ public class MerchantResource {
             return Response.status(200).entity(payment).build();
         }
     }
-    @Path("report")
+    @Path("reports/{merchantID}")
     @GET
     @Produces("application/json")
-    public Response getReports(String paymentID) {
+    public Response getReports(@PathParam("merchantID")String userID) {
         MerchantFacade MF = new MerchantFacadeFactory().getFacade();
-        ReportList reportList = MF.reportListRecived(paymentID);
+        ReportList reportList = MF.reportListRecived(userID);
 
         return Response.status(200).entity(reportList).build();
     }

@@ -1,11 +1,11 @@
 package facades.customerFacade;
 
 import facades.DTO.RegistrationDTO;
+import facades.DTO.ReportList;
 import facades.DTO.TokenList;
 import facades.enums.UserType;
 import facades.exceptions.RegistrationException;
 import facades.exceptions.ToManyTokensLeftException;
-import facades.managerFacade.ReportList;
 import messaging.Event;
 import messaging.MessageQueue;
 

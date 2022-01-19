@@ -18,10 +18,6 @@
         <module name="TokenService" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="Broker" target="11" />
-      <module name="student-registration-service" target="11" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">

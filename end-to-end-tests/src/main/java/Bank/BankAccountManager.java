@@ -3,6 +3,7 @@ package Bank;
 import dtu.ws.fastmoney.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class BankAccountManager {
     static BankService bank = new BankServiceService().getBankServicePort();
@@ -28,7 +29,11 @@ public class BankAccountManager {
         bank.transferMoneyFromTo(cID, mID, amount, description);
     }
 
-    public static boolean getAccount(String bankID) throws BankServiceException_Exception {
-        return bank.getAccount(bankID) != null;
+    public static Account getAccount(String bankID) throws BankServiceException_Exception {
+        return bank.getAccount(bankID);
+    }
+
+    public static List<AccountInfo> getAccounts() throws BankServiceException_Exception {
+        return bank.getAccounts();
     }
 }

@@ -7,6 +7,7 @@ import messaging.Event;
 import messaging.MessageQueue;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 public class MerchantFacade {
     private MessageQueue queue;
@@ -27,8 +28,12 @@ public class MerchantFacade {
 //        queue.addHandler("MerchantInvalidInput", this::unsuccessfulMerchantRegistration);
         queue.addHandler("MerchantUnsuccessfulRegistration", this::unsuccessfulMerchantRegistration);
         queue.addHandler("UserID fecthed", this::handleUserIdFetched);
+        queue.addHandler("TokenNotFound", this::handleTokenNotFound);
+        queue.addHandler("FoundSpecificUser", this::handleFoundSpecificUser);
+        queue.addHandler("FoundSpecificUser", this::handleFoundSpecificUser);
+        queue.addHandler("ReportCreationRequestSucceeded",this::handleReportCreated);
+        queue.addHandler("ReportCreationRequestFailed",this::handleReportCreated);
     }
-
 
     public String registerMerchant(RegistrationDTO regInfo) {
         future = new CompletableFuture<>();
@@ -74,6 +79,11 @@ public class MerchantFacade {
         tokeConsumerFuture.complete(id);
     }
 
+    private void handleTokenNotFound(Event event) {
+        var id = event.getArgument(0,String.class);
+        tokeConsumerFuture.complete(id);
+    }
+
     public Account getSpecificUser(String userID) {
         getSpecificUserFuture = new CompletableFuture<>();
         Event tempE = new Event("GetSpecificUserById",  new Object[] { userID });
@@ -81,10 +91,24 @@ public class MerchantFacade {
         return getSpecificUserFuture.join();
     }
 
+    private void handleFoundSpecificUser(Event e) {
+        var id = e.getArgument(0, Account.class);
+        getSpecificUserFuture.complete(id);
+    }
+
     public Report createReport(ReportRequest reportRequest){
         reportFuture = new CompletableFuture<>();
         Event tempE = new Event("ReportCreationRequest",  new Object[] { reportRequest });
         queue.publish(tempE);
+        reportFuture.orTimeout(10, TimeUnit.SECONDS);
+        reportFuture.cancel(true);
         return reportFuture.join();
     }
+
+    private void handleReportCreated(Event e) {
+        var id = e.getArgument(0, Report.class);
+        reportFuture.complete(id);
+    }
+
+
 }

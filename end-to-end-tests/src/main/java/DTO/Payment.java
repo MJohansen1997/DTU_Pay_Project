@@ -13,6 +13,10 @@ public class Payment implements Serializable {
     public String token;
     public String errorMessage;
 
+    public Payment(){
+
+    }
+
     public Payment(String debitor, String creditor, String merchantId, BigDecimal amount, String description, String token) {
         this.debitor = debitor;
         this.creditor = creditor;

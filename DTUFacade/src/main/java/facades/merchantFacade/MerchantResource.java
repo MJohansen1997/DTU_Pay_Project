@@ -37,12 +37,14 @@ public class MerchantResource {
         MerchantFacade CF = new MerchantFacadeFactory().getFacade();
         String customer_userId = CF.consumeToken(tokenID);
         //if the token consumed returns a user and that user is connected to the payment
-        if(customer_userId!=null && customer_userId.length()>0){
+        if(customer_userId!=null && customer_userId.length()>0 && !customer_userId.equalsIgnoreCase("Invalid token, no such token")){
             String userBankAccountID = payment.debitor;
             Account account = CF.getSpecificUser(customer_userId);
             if(!userBankAccountID.equalsIgnoreCase(account.getBankID())){
                 return Response.status(401).entity("Not authorized").build();
             }
+        }else{
+            return Response.status(404).entity("Invalid token, no such token").build();
         }
         //payment.setDebitor(customer_userId);
         Payment p = CF.paymentMerchant(payment);
@@ -58,7 +60,7 @@ public class MerchantResource {
             BigDecimal amount = p.getAmount();
 
             //This method creates the report
-            CF.createReport(new ReportRequest("",customerID,merchantID,tokenId,customerBankID,merchantBankID,amount ));
+            //CF.createReport(new ReportRequest("",customerID,merchantID,tokenId,customerBankID,merchantBankID,amount ));
 
             return Response.status(200).entity(payment).build();
         }

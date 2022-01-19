@@ -10,8 +10,8 @@ public class AccountStartUp {
 
         private void startUp() throws Exception {
             System.out.println("startup");
-            var mq = new RabbitMqQueue("localhost");
-//            var mq = new RabbitMqQueue("rabbitmq");
+//            var mq = new RabbitMqQueue("localhost");
+            var mq = new RabbitMqQueue("rabbitmq");
             new FacadeAdapter(mq, new AccountService(new AccountRepositoryAdapter()));
         }
 }

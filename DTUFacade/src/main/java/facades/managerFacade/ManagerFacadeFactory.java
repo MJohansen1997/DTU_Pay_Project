@@ -22,7 +22,8 @@ public class ManagerFacadeFactory {
         // is called dependency injection.
         // At the end, we can use the PaymentService in tests
         // without sending actual messages to RabbitMq.
-        var mq = new RabbitMqQueue("localhost");
+//        var mq = new RabbitMqQueue("localhost");
+        var mq = new RabbitMqQueue("rabbitmq");
         facade = new ManagerFacade(mq);
 //		new StudentRegistrationServiceAdapter(service, mq);
         return facade;

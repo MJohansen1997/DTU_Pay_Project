@@ -33,8 +33,8 @@ public class MerchantFacade {
         queue.addHandler("TokenNotFound", this::handleTokenNotFound);
         queue.addHandler("FoundSpecificUser", this::handleFoundSpecificUser);
         queue.addHandler("FoundSpecificUser", this::handleFoundSpecificUser);
-        queue.addHandler("ReportCreationRequestSucceeded",this::handleReportCreated);
-        queue.addHandler("ReportCreationRequestFailed",this::handleReportCreated);
+//        queue.addHandler("ReportCreationRequestSucceeded",this::handleReportCreated);
+//        queue.addHandler("ReportCreationRequestFailed",this::handleReportCreated);
     }
 
     public String registerMerchant(RegistrationDTO regInfo) {
@@ -105,19 +105,19 @@ public class MerchantFacade {
         getSpecificUserFuture.complete(id);
     }
 
-    public Report createReport(ReportRequest reportRequest){
-        reportFuture = new CompletableFuture<>();
+    public void createReport(ReportRequest reportRequest){
+//        reportFuture = new CompletableFuture<>();
         Event tempE = new Event("ReportCreationRequest",  new Object[] { reportRequest });
         queue.publish(tempE);
-        reportFuture.orTimeout(10, TimeUnit.SECONDS);
-        reportFuture.cancel(true);
-        return reportFuture.join();
+//        reportFuture.orTimeout(10, TimeUnit.SECONDS);
+//        reportFuture.cancel(true);
+//        return reportFuture.join();
     }
 
-    private void handleReportCreated(Event e) {
-        var id = e.getArgument(0, Report.class);
-        reportFuture.complete(id);
-    }
+//    private void handleReportCreated(Event e) {
+//        var id = e.getArgument(0, Report.class);
+//        reportFuture.complete(id);
+//    }
 
 
 }

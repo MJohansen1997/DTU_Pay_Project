@@ -8,7 +8,7 @@ set -e
 pushd end-to-end-tests
 ./deploy.sh 
 sleep 5
-#./test.sh
+./test.sh
 popd
 
 # Cleanup the build images

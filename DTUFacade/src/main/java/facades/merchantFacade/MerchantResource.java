@@ -60,7 +60,7 @@ public class MerchantResource {
             BigDecimal amount = p.getAmount();
 
             //This method creates the report
-            //CF.createReport(new ReportRequest("",customerID,merchantID,tokenId,customerBankID,merchantBankID,amount ));
+            CF.createReport(new ReportRequest("",customerID,merchantID,tokenId,customerBankID,merchantBankID,amount ));
 
             return Response.status(200).entity(payment).build();
         }

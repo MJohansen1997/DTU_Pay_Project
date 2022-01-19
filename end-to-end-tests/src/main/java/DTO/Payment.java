@@ -1,4 +1,4 @@
-package facades.DTO;
+package DTO;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -12,6 +12,19 @@ public class Payment implements Serializable {
     public String description;
     public String token;
     public String errorMessage;
+
+    public Payment(){
+
+    }
+
+    public Payment(String debitor, String creditor, String merchantId, BigDecimal amount, String description, String token) {
+        this.debitor = debitor;
+        this.creditor = creditor;
+        this.merchantId = merchantId;
+        this.amount = amount;
+        this.description = description;
+        this.token = token;
+    }
 
     public String getErrorMessage() { return errorMessage; }
 

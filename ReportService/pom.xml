@@ -86,7 +86,7 @@
                         <index>true</index>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>studentid.service.StartUp</mainClass>
+                            <mainClass>report.service.ReportStartUp</mainClass>
                             <classpathPrefix>lib/</classpathPrefix>
                         </manifest>
                     </archive>

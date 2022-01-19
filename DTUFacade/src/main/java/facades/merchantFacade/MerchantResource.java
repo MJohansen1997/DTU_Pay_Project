@@ -2,6 +2,7 @@ package facades.merchantFacade;
 
 import facades.DTO.Payment;
 import facades.DTO.RegistrationDTO;
+import facades.DTO.ReportRequest;
 import facades.managerFacade.ManagerFacade;
 import facades.managerFacade.ManagerFacadeFactory;
 import facades.managerFacade.ReportList;
@@ -9,6 +10,7 @@ import facades.managerFacade.ReportList;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.math.BigDecimal;
 
 @Path("/merchant")
 public class MerchantResource {
@@ -35,12 +37,33 @@ public class MerchantResource {
     public Response payment(Payment payment) {
         String tokenID = payment.getToken();
         MerchantFacade CF = new MerchantFacadeFactory().getFacade();
-        //String userID = CF.consumeToken(tokenID);
-        //payment.setDebitor(userID);
+        String customer_userId = CF.consumeToken(tokenID);
+        //if the token consumed returns a user and that user is connected to the payment
+        if(customer_userId!=null && customer_userId.length()>0 && !customer_userId.equalsIgnoreCase("Invalid token, no such token")){
+            String userBankAccountID = payment.debitor;
+            Account account = CF.getSpecificUser(customer_userId);
+            if(!userBankAccountID.equalsIgnoreCase(account.getBankID())){
+                return Response.status(401).entity("Not authorized").build();
+            }
+        }else{
+            return Response.status(404).entity("Invalid token, no such token").build();
+        }
+        //payment.setDebitor(customer_userId);
         Payment p = CF.paymentMerchant(payment);
         if(p.getErrorMessage()!=null){
             return Response.status(404).entity(p.getErrorMessage()).build();
         }else{
+            //Create a report
+            String customerID = customer_userId;
+            String merchantID = p.getMerchantId();
+            String tokenId = p.getToken();
+            String customerBankID = p.getDebitor();
+            String merchantBankID = p.getCreditor();
+            BigDecimal amount = p.getAmount();
+
+            //This method creates the report
+            //CF.createReport(new ReportRequest("",customerID,merchantID,tokenId,customerBankID,merchantBankID,amount ));
+
             return Response.status(200).entity(payment).build();
         }
     }

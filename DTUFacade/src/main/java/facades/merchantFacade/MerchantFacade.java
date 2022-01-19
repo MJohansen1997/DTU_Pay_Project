@@ -4,7 +4,6 @@ import facades.DTO.Payment;
 import facades.DTO.RegistrationDTO;
 import facades.enums.UserType;
 import facades.exceptions.RegistrationException;
-import facades.managerFacade.ReportList;
 import messaging.Event;
 import messaging.MessageQueue;
 
@@ -15,6 +14,8 @@ public class MerchantFacade {
     private CompletableFuture<String> future;
     private CompletableFuture<Payment> paymentFuture;
     private CompletableFuture<String> tokeConsumerFuture;
+    private CompletableFuture<Account> getSpecificUserFuture;
+    private CompletableFuture<Report> reportFuture;
     private CompletableFuture<ReportList> reportRequested;
     private Payment p;
 
@@ -28,8 +29,12 @@ public class MerchantFacade {
 //        queue.addHandler("MerchantInvalidInput", this::unsuccessfulMerchantRegistration);
         queue.addHandler("MerchantUnsuccessfulRegistration", this::unsuccessfulMerchantRegistration);
         queue.addHandler("UserID fecthed", this::handleUserIdFetched);
+        queue.addHandler("TokenNotFound", this::handleTokenNotFound);
+        queue.addHandler("FoundSpecificUser", this::handleFoundSpecificUser);
+        queue.addHandler("FoundSpecificUser", this::handleFoundSpecificUser);
+        queue.addHandler("ReportCreationRequestSucceeded",this::handleReportCreated);
+        queue.addHandler("ReportCreationRequestFailed",this::handleReportCreated);
     }
-
 
     public String registerMerchant(RegistrationDTO regInfo) {
         future = new CompletableFuture<>();
@@ -81,4 +86,37 @@ public class MerchantFacade {
         queue.publish(event);
         return reportRequested.join();
     }
+
+    private void handleTokenNotFound(Event event) {
+        var id = event.getArgument(0,String.class);
+        tokeConsumerFuture.complete(id);
+    }
+
+    public Account getSpecificUser(String userID) {
+        getSpecificUserFuture = new CompletableFuture<>();
+        Event tempE = new Event("GetSpecificUserById",  new Object[] { userID });
+        queue.publish(tempE);
+        return getSpecificUserFuture.join();
+    }
+
+    private void handleFoundSpecificUser(Event e) {
+        var id = e.getArgument(0, Account.class);
+        getSpecificUserFuture.complete(id);
+    }
+
+    public Report createReport(ReportRequest reportRequest){
+        reportFuture = new CompletableFuture<>();
+        Event tempE = new Event("ReportCreationRequest",  new Object[] { reportRequest });
+        queue.publish(tempE);
+        reportFuture.orTimeout(10, TimeUnit.SECONDS);
+        reportFuture.cancel(true);
+        return reportFuture.join();
+    }
+
+    private void handleReportCreated(Event e) {
+        var id = e.getArgument(0, Report.class);
+        reportFuture.complete(id);
+    }
+
+
 }

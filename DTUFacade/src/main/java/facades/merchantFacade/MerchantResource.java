@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Path("/merchant")
 public class MerchantResource {
     @POST
-    @Path("register")
+    @Path("account")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response registerMerchant(RegistrationDTO RegInfo) {

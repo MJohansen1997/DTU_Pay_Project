@@ -22,7 +22,7 @@ public class MerchantAPI {
 
 
     public String registerMerchant(UserDTO user){
-        WebTarget target = client.target("http://localhost:8080/merchant/register");
+        WebTarget target = client.target("http://localhost:8080/merchant/account");
         String result;
         try {
             result = target.request(MediaType.APPLICATION_JSON)

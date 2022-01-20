@@ -13,12 +13,12 @@ import java.util.HashSet;
 import java.util.InvalidPropertiesFormatException;
 
 public class AccountRepository implements IAccountRepository {
-    @Getter @Setter HashMap<String, Account> merchantList = new HashMap<>();
-    @Getter @Setter HashMap<String, Account> customerList = new HashMap<>();
+
+    //We're storing our users and bank ids
     @Getter @Setter HashMap<String, Account> userList = new HashMap<>();
     @Getter @Setter HashSet<String> bankIds = new HashSet<>();
 
-
+    //Adds a user to our internal storage
     @Override
     public void addNewUser(Account account, String userId) throws IllegalArgumentException {
         if(bankIds.contains(account.getBankID()))
@@ -29,6 +29,7 @@ public class AccountRepository implements IAccountRepository {
         }
     }
 
+    //Finds a specific user from our internal storage
     @Override
     public Account getSpecificUser(String userId) throws NotFoundException {
         if(userList.containsKey(userId))

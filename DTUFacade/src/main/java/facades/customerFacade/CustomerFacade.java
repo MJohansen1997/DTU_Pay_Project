@@ -16,6 +16,7 @@ public class CustomerFacade {
     private CompletableFuture<TokenList> tokensRequested;
     private CompletableFuture<CustomerReportList> reportRequested;
 
+    //Default constructor to handle messages
     public CustomerFacade(MessageQueue q) {
         queue = q;
         queue.addHandler("CustomerRegisteredSuccessfully", this::successfulCustomerRegistration);
@@ -30,6 +31,7 @@ public class CustomerFacade {
 
     }
 
+    //Publishes an Event for registering a customer
     public String registerCustomer(RegistrationDTO regInfo) {
         future = new CompletableFuture<>();
         Event tempE = new Event("UserRegister", new Object[]{regInfo, UserType.CUSTOMER});
@@ -56,7 +58,7 @@ public class CustomerFacade {
         tokensRequested.completeExceptionally(new ToManyTokensLeftException(e.getType()));
     }
 
-
+    //Handles succesful event and returns a BankID for the customer
     private void successfulCustomerRegistration(Event e) {
         var id = e.getArgument(0, String.class);
         future.complete(id);
@@ -65,6 +67,7 @@ public class CustomerFacade {
         future.completeExceptionally(new RegistrationException(e.getArgument(0, String.class)));
     }
 
+    //Publishes an event to request a report of all payments for a specific customer
     public CustomerReportList reportListRequest(String userID) {
         reportRequested = new CompletableFuture<>();
         Event event = new Event("CustomerReportsRequest", new Object[] { userID });
@@ -72,11 +75,13 @@ public class CustomerFacade {
         return reportRequested.join();
     }
 
+    //Handles a succesful list being received
     public void reportListReceived(Event event) {
         var list = event.getArgument(0, CustomerReportList.class);
         reportRequested.complete(list);
     }
 
+    //Handles if the report request was unsuccesful
     public void reportListFailed(Event event) {
         reportRequested.complete(null);
     }

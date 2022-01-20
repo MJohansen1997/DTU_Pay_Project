@@ -9,8 +9,9 @@ import java.math.BigDecimal;
 
 @Path("/merchant")
 public class MerchantResource {
+    //Endpoint for registering an account
     @POST
-    @Path("register")
+    @Path("account")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response registerMerchant(RegistrationDTO RegInfo) {
@@ -25,6 +26,7 @@ public class MerchantResource {
         return Response.status(200).entity(id).build();
     }
 
+    //Endpoint for initiating a payment
     @Path("payment")
     @POST
     @Consumes("application/json")
@@ -62,6 +64,8 @@ public class MerchantResource {
             return Response.status(200).entity(payment).build();
         }
     }
+
+    //Endpoint for requesting a report based of MerchantID
     @Path("reports/{merchantID}")
     @GET
     @Produces("application/json")

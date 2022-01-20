@@ -13,17 +13,19 @@ public class ManagerFacade {
     private CompletableFuture<String> future;
     private CompletableFuture<ReportList> reportRequested;
 
+    //Default constructor to handle messages
     public ManagerFacade(MessageQueue q) {
         queue = q;
         queue.addHandler("ManagerReportRequest", this::succesfulReportRequested);
     }
 
-
+    //Handles the response from ReportService
     private void succesfulReportRequested(Event e) {
         var report = e.getArgument(0, ReportList.class);
         reportRequested.complete(report);
     }
 
+    //Initiates an event to get all lists from ReportService
     public ReportList reportListRecived() {
         reportRequested = new CompletableFuture<>();
         Event event = new Event("ReportManager", new Object[] {  });

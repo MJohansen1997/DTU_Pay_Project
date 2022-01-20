@@ -3,6 +3,8 @@ package account.service;
 import java.util.UUID;
 
 public class idGenerator {
+
+    //Generates a random ID and adds m or c to make it a unique ID for merchant and customer
     public static String generateID(String role) {
         String id;
         switch (role) {

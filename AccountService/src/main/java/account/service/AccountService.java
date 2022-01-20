@@ -10,21 +10,21 @@ import dtu.ws.fastmoney.BankService;
 import dtu.ws.fastmoney.BankServiceException_Exception;
 import dtu.ws.fastmoney.BankServiceService;
 
+//Engages with our AccountAdapter
 public class AccountService {
     BankService bankService = new BankServiceService().getBankServicePort();
     IExternalService service;
 
+    //Default constructor
     public AccountService(IExternalService service) {
         this.service = service;
     }
 
+    //Registers a user with a role of either merchant or customer and stores the user in our AccountRepoistory
     public String registerUser(Account acc, String role) throws BankIdAlreadyRegisteredException, InvalidRegistrationInputException, BankIdNotFoundException {
         try {
-            System.out.println("før validate");
             validateBankDetails(acc);
-            System.out.println("efter bank validate");
             validateRegistrationInput(acc);
-            System.out.println("efter input validate");
             String id = idGenerator.generateID(role);
             service.registerUser(acc, id);
             return id;
@@ -34,15 +34,18 @@ public class AccountService {
         }
     }
 
+    //Will get a specific user based of their id
     public Account getSpecifiedUser(String userId) throws UserNotFoundException {
         return service.getSpecificUser(userId);
     }
 
+    //Helper function for registering a user. Which validates their bankID
     private void validateBankDetails(Account accToValidate) throws BankServiceException_Exception {
         System.out.println("checking if bankid: " + accToValidate.getBankID() + " exists");
         bankService.getAccount(accToValidate.getBankID());
     }
 
+    //Validates that all input is legal
     private void validateRegistrationInput(Account accToValidate) throws InvalidRegistrationInputException {
         accToValidate.setCpr(accToValidate.getCpr().replace("-", ""));
 

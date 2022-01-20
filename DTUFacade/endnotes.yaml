@@ -1,0 +1,77 @@
+---
+openapi: 3.0.3
+info:
+  title: Generated API
+  version: "1.0"
+paths:
+  /customer/register:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistrationDTO'
+      responses:
+        "200":
+          description: OK
+  /customer/reports/{customerID}:
+    get:
+      parameters:
+        - name: customerID
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+  /customer/tokens:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        "200":
+          description: OK
+  /manager/reports:
+    get:
+      responses:
+        "200":
+          description: OK
+  /merchant/payment:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Payment'
+      responses:
+        "200":
+          description: OK
+  /merchant/register:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistrationDTO'
+      responses:
+        "200":
+          description: OK
+  /merchant/reports/{merchantID}:
+    get:
+      parameters:
+        - name: merchantID
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+components:
+  schemas:
+    RegistrationDTO:
+      type: object

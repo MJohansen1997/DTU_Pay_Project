@@ -10,9 +10,7 @@ import token.service.port.ITokenService;
 import token.service.storage.TokenRepository;
 
 public class TokenAdapter {
-
     MessageQueue queue;
-
     private final ITokenService tokenService;
 
     public TokenAdapter(MessageQueue q, ITokenService service) {
@@ -24,6 +22,7 @@ public class TokenAdapter {
         queue.addHandler("TokensFromUserIDRequested", this::handleTokensFromUserID);
     }
 
+    //used to create the user in the repository so we won't have to confirm userID with account service everytime
     public void handleCreationRequest(Event event) {
         var userID = event.getArgument(0, String.class);
         tokenService.createUser(userID);
@@ -66,5 +65,4 @@ public class TokenAdapter {
             queue.publish(returnEvent);
         }
     }
-
 }

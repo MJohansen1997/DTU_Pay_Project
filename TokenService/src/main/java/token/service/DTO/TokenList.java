@@ -6,6 +6,7 @@ import java.util.ArrayList;
 public class TokenList implements Serializable {
 
     private static final long serialVersionUID = 9023222981284806610L;
+
     private ArrayList<String> tokens;
 
     public TokenList() {

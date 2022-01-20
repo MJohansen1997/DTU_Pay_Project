@@ -8,6 +8,7 @@ public class ReportList implements Serializable {
 
     private ArrayList<Report> reports;
 
+    //make a datatype ReportList as an arraylist of Reports
     public ReportList() {
         this.reports = new ArrayList<>();
     }

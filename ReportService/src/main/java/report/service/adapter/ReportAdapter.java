@@ -16,10 +16,9 @@ public class ReportAdapter {
         queue = q;
         queue.addHandler("CustomerRegisteredSuccessfully", this::handleCreateUserInReportRegister);
         queue.addHandler("ReportCreationRequest", this::handleCreateReport);
-        queue.addHandler("ReportManager", this::handleReportManager);
+        queue.addHandler("ReportManager", this::handleReportManagerRequest);
         queue.addHandler("CustomerReportsRequest", this::handleCustomerReportRequest);
         queue.addHandler("MerchantReportsRequest", this::handleMerchantReportRequest);
-//        queue.addHandler("CustomerReportsRequest", this::handleMerchantReportRequest);
         queue.addHandler("MerchantRegisteredSuccessfully", this::handleCreateUserInReportRegister);
         this.service = service;
     }
@@ -42,7 +41,7 @@ public class ReportAdapter {
         }
     }
 
-    public void handleReportManager(Event event){
+    public void handleReportManagerRequest(Event event){
         Event returnEvent;
         returnEvent = new Event("ManagerReportRequest", new Object[] {service.getManagerReports()});
         queue.publish(returnEvent);

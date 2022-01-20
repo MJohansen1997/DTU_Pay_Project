@@ -15,6 +15,7 @@ public class ReportService implements IReportService {
         this.repository = repository;
     }
 
+    //create the user in the report repository
     public void createUser(String userid) {
         repository.createReportList(userid);
     }
@@ -23,6 +24,7 @@ public class ReportService implements IReportService {
         CustomerReport customerReport = new CustomerReport();
         MerchantReport merchantReport = new MerchantReport();
 
+        //actual make the customerReport
         customerReport.setPaymentID(String.valueOf(paymentIDIncrementer));
         customerReport.setCustomerID(request.getCustomerID());
         customerReport.setMerchantID(request.getMerchantID());
@@ -30,12 +32,14 @@ public class ReportService implements IReportService {
         customerReport.setBankID(request.getCustomerBankID());
         customerReport.setAmount(request.getAmount());
 
+        //actual make the merchantReport
         merchantReport.setPaymentID(String.valueOf(paymentIDIncrementer++));
         merchantReport.setMerchantID(request.getMerchantID());
         merchantReport.setTokenID(request.getTokenID());
         merchantReport.setBankID(request.getMerchantBankID());
         merchantReport.setAmount(request.getAmount());
 
+        //adds the two reports to the report repository
         try {
             repository.addReport(request.getCustomerID(), customerReport);
         } catch (IncorrectInformationException ignored) {
@@ -51,6 +55,7 @@ public class ReportService implements IReportService {
     }
 
 
+    //gets all the reports from report repository
     public ReportList getManagerReports() {
         ArrayList<ReportList> temp = repository.getReports();
         ReportList results = new ReportList();
@@ -61,6 +66,7 @@ public class ReportService implements IReportService {
         return results;
     }
 
+    //get reports based om the customer og the merchants ID
     public ReportList getReportsByID(String userID) throws IncorrectInformationException {
         try{
             return repository.getReportsByUser(userID);

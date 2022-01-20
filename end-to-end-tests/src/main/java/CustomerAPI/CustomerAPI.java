@@ -59,7 +59,7 @@ public class CustomerAPI {
     }
 
     public String registerCustomer(UserDTO user) {
-        WebTarget target = client.target("http://localhost:8080/customer/register");
+        WebTarget target = client.target("http://localhost:8080/customer/account");
         String result;
         try {
             result = target.request(MediaType.APPLICATION_JSON)

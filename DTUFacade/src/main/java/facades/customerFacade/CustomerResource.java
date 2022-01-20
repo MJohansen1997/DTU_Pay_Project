@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class CustomerResource{
 
     @POST
-    @Path("register")
+    @Path("account")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response registerCustomer(RegistrationDTO RegInfo) {

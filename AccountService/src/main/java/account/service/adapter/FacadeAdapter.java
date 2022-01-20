@@ -13,6 +13,7 @@ public class FacadeAdapter {
     MessageQueue queue;
     AccountService accountService;
 
+    //Default constructor to initiate queue and AccountService
     public FacadeAdapter(MessageQueue q, AccountService as) {
         queue = q;
         this.accountService = as;
@@ -23,6 +24,7 @@ public class FacadeAdapter {
 
     }
 
+    //Handler which communicates with our Facade when
     public void registerUser(Event event) {
         Account acc = event.getArgument(0, Account.class);
         String role = event.getArgument(1, String.class);
@@ -39,6 +41,7 @@ public class FacadeAdapter {
         }
     }
 
+    //Handles the event of someone wanting to get a specific user
     public void getSpecificUser(Event event) {
         String id = event.getArgument(0,  String.class);
         try {

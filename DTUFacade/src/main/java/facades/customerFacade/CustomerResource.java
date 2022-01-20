@@ -10,9 +10,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 
+//Default rest path to access customer
 @Path("/customer")
 public class CustomerResource{
 
+    //Endpoint for registering a customer
     @POST
     @Path("account")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -31,6 +33,7 @@ public class CustomerResource{
         return Response.status(200).entity(id).build();
     }
 
+    //Endpoint for requesting tokens
     @POST
     @Path("tokens")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -45,6 +48,7 @@ public class CustomerResource{
         }
     }
 
+    //Endpoint for requesting a report list based of customerID
     @Path("reports/{customerID}")
     @GET
     @Produces("application/json")

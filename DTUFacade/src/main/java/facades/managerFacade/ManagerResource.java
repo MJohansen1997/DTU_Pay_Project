@@ -9,9 +9,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 
+//Default rest path to access manager
 @Path("/manager")
 public class ManagerResource {
 
+    //Will initiate a request for all reports
     @Path("reports")
     @GET
     @Produces("application/json")

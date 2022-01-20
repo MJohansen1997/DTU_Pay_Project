@@ -7,6 +7,7 @@ import account.service.exception.UserNotFoundException;
 
 import java.util.HashMap;
 
+//External interface that has the functionality for our AccountService
 public interface IExternalService {
     void registerUser(Account acc, String userId) throws BankIdAlreadyRegisteredException;
     Account getSpecificUser(String userId) throws UserNotFoundException;

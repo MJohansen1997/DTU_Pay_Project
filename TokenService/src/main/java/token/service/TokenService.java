@@ -1,7 +1,6 @@
 package token.service;
 
 import token.service.DTO.TokenList;
-import token.service.storage.TokenRepository;
 import token.service.exceptions.InvalidTokenException;
 import token.service.exceptions.ToManyTokensLeftException;
 import token.service.exceptions.UserNotFoundException;
@@ -30,8 +29,7 @@ public class TokenService implements ITokenService {
             throw new UserNotFoundException("Invalid User");
         if (temp.getTokens().size() > 1)
             throw new ToManyTokensLeftException("To many tokens left");
-        //This method is used to make sure the user doesn't have more than the 1 allowed token left before requesting a new one
-        //here we return a new list of Tokens
+        //here we return a new list of Tokens while also updating the list in the repository.
         return repository.updateTokenList(userID, generateNewSet(temp.getTokens().size()));
     }
 
@@ -44,7 +42,6 @@ public class TokenService implements ITokenService {
         }
     }
 
-    // Inefficent since it has to run through whole hashMap for each call
     public TokenList getTokensFromUserID(String userID) throws UserNotFoundException {
         // If the userID is not contained in the register throw an exception
         return repository.getTokensByUser(userID);
@@ -54,10 +51,12 @@ public class TokenService implements ITokenService {
     private TokenList generateNewSet(int tokensLeftOffSet) {
         TokenList list = new TokenList();
         String token;
+        //the offset is used to make sure if the customer has 1 token left
+        // so that we don't give him 6 new ones to a total of 7
         for (int i = 0; i < 6 - tokensLeftOffSet; i++) {
             String temp;
             do {
-                token = generateRandomToken();
+                token = generateRandomTokenString();
                 try {
                     temp = repository.getUserByToken(token);
                 }catch (Exception ignored){
@@ -71,7 +70,7 @@ public class TokenService implements ITokenService {
     }
 
     //Taken from https://www.codegrepper.com/code-examples/java/java+generate+token+string
-    private static String generateRandomToken() {
+    private static String generateRandomTokenString() {
         int len = 20;
         String chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijk"
                 +"lmnopqrstuvwxyz!@#$%&";
